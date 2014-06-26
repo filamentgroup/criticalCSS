@@ -1,5 +1,6 @@
 /*global require:true*/
 /*global console:true*/
+/*global __dirname:true*/
 (function( exports ){
 	"use strict";
 
@@ -37,7 +38,7 @@
 
 		execFile( phantomJsPath,
 			[
-				path.join( 'lib', 'criticalrunner.js' ),
+				path.resolve( path.join( __dirname, 'lib', 'criticalrunner.js' ) ),
 				url,
 				filename,
 				width,
