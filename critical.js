@@ -32,7 +32,6 @@
 
 		var width = opts.width || 1200;
 		var height = opts.height || 900;
-		var output = opts.output || "dist.css";
 		var filename = opts.filename || "all.css";
 
 
@@ -41,13 +40,11 @@
 				path.join( 'lib', 'criticalrunner.js' ),
 				url,
 				filename,
-				output,
 				width,
 				height
 			],
 
 			function(err, stdout, stderr){
-				console.log( "Hi" );
 				if( err ){
 					console.log("\nSomething went wrong with phantomjs...");
 					if( stderr ){
@@ -55,7 +52,6 @@
 					}
 					cb( err, null );
 				} else {
-					console.log( stdout );
 					cb( null, stdout );
 				}
 

@@ -19,6 +19,7 @@
 */
 
 /*global require:true*/
+/*global __dirname:true*/
 (function( exports ){
 	'use strict';
 
@@ -49,6 +50,19 @@
 				critical.findCritical(5);
 			}, TypeError, "Should throw type error if there is no url" );
 			test.done();
+		},
+		'url given': function( test ){
+			test.expect(1);
+
+			critical.findCritical( path.resolve( path.join( __dirname, '..', 'files', 'test-site.html' ) ), function( err, content ){
+				if( err ){
+					throw new Error( err );
+				} else {
+					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\n", "Content should match" );
+				}
+				test.done();
+			});
+
 		}
 	};
 }(typeof exports === 'object' && exports || this));
