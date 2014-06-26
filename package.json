@@ -15,7 +15,7 @@
 	"bugs": {
 		"url": "https://github.com/filamentgroup/criticalcss/issues"
 	},
-	"main": "./criticalcss.js",
+	"main": "./critical.js",
 	"licenses": [
 		{
 			"type": "MIT",
