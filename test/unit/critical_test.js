@@ -51,9 +51,8 @@
 			}, TypeError, "Should throw type error if there is no url" );
 			test.done();
 		},
-		'url given': function( test ){
+		'url given - some content out of frame': function( test ){
 			test.expect(1);
-
 			critical.findCritical( path.resolve( path.join( __dirname, '..', 'files', 'test-site.html' ) ), function( err, content ){
 				if( err ){
 					throw new Error( err );
@@ -62,7 +61,18 @@
 				}
 				test.done();
 			});
+		},
+		'url given': function( test ){
+			test.expect(1);
 
+			critical.findCritical( path.resolve( path.join( __dirname, '..', 'files', 'test-site.html' ) ), { height: 1000 }, function( err, content ){
+				if( err ){
+					throw new Error( err );
+				} else {
+					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }", "Content should match" );
+				}
+				test.done();
+			});
 		}
 	};
 }(typeof exports === 'object' && exports || this));
