@@ -14,22 +14,22 @@ criticalcss.findCritical("path/to/file/or/url", options (not required), function
 	if( err ){
 		throw new Error( err );
 	} else {
-		fs.writeFileSync( "filename, output );
+		fs.writeFileSync( filename, output );
   }
 });
 
 ```
 
 ## Documentation
-.findCritical
+`.findCritical`
 
 Takes url or path to file, an options hash, and a callback function
 
 ### Default values for options hash
 
-* width:  1200;
-* height: 900;
-* filename: "all.css";
+* `width`:  1200;
+* `height`: 900;
+* `filename`: "all.css";
 
 ## Examples
 Check out the tests!
