@@ -10,3 +10,9 @@ div {
 	font-weight: normal;
 	margin-top: 900px;
 }
+
+@media (min-width: 1100px){
+	div {
+		font-size: 3em;
+	}
+}
