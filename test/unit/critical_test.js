@@ -24,7 +24,7 @@
 	'use strict';
 
 	var path = require( 'path' );
-	var critical = require(path.join( "..", "..", "critical.js") );
+	var critical = require(path.join( '..', '..', 'critical.js') );
 
 
 	exports.findCritical = {
@@ -40,7 +40,7 @@
 			// tests here
 			test.throws( function(){
 				critical.findCritical();
-			}, TypeError, "Should throw type error if there is no url" );
+			}, TypeError, 'Should throw type error if there is no url' );
 			test.done();
 		},
 		'url given but is not string': function( test ){
@@ -48,7 +48,7 @@
 			// tests here
 			test.throws( function(){
 				critical.findCritical(5);
-			}, TypeError, "Should throw type error if there is no url" );
+			}, TypeError, 'Should throw type error if there is no url' );
 			test.done();
 		},
 		'url given - some content out of frame': function( test ){
@@ -57,7 +57,7 @@
 				if( err ){
 					throw new Error( err );
 				} else {
-					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\n\n", "Content should match" );
+					test.equal( content, 'h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\n\n', 'Content should match' );
 				}
 				test.done();
 			});
@@ -69,7 +69,7 @@
 				if( err ){
 					throw new Error( err );
 				} else {
-					test.equal( content, 'h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n@media (min-width: 1100px){\ndiv{ font-size: 3em; }\n}', "Content should match" );
+					test.equal( content, 'h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n@media (min-width: 1100px){\ndiv{ font-size: 3em; }\n}', 'Content should match' );
 				}
 				test.done();
 			});
@@ -81,7 +81,7 @@
 				if( err ){
 					throw new Error( err );
 				} else {
-					test.equal( content, 'h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n', "Content should match" );
+					test.equal( content, 'h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n', 'Content should match' );
 				}
 				test.done();
 			});
