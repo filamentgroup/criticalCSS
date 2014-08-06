@@ -2,11 +2,11 @@
 /*global console:true*/
 /*global __dirname:true*/
 (function( exports ){
-	'use strict';
+	"use strict";
 
-	var phantomJsPath = require('phantomjs').path;
-	var execFile = require('child_process').execFile;
-	var path = require( 'path' );
+	var phantomJsPath = require("phantomjs").path;
+	var execFile = require("child_process").execFile;
+	var path = require( "path" );
 
 	exports.findCritical = function( url, opts, cb ){
 		var defaultCb = function( err, output ){
@@ -17,28 +17,28 @@
 			}
 		};
 
-		if( typeof url !== 'string' ){
-			throw new TypeError( 'URL must be a string' );
+		if( typeof url !== "string" ){
+			throw new TypeError( "URL must be a string" );
 		}
 
-		if( typeof opts === 'undefined' && typeof cb === 'undefined' ){
+		if( typeof opts === "undefined" && typeof cb === "undefined" ){
 			opts = {};
 			cb = defaultCb;
 		}
 
-		if( typeof opts === 'function' ){
+		if( typeof opts === "function" ){
 			cb = opts;
 			opts = {};
 		}
 
 		var width = opts.width || 1200;
 		var height = opts.height || 900;
-		var filename = opts.filename || 'all.css';
+		var filename = opts.filename || "all.css";
 
 
 		execFile( phantomJsPath,
 			[
-				path.resolve( path.join( __dirname, 'lib', 'criticalrunner.js' ) ),
+				path.resolve( path.join( __dirname, "lib", "criticalrunner.js" ) ),
 				url,
 				filename,
 				width,
@@ -47,7 +47,7 @@
 
 			function(err, stdout, stderr){
 				if( err ){
-					console.log('\nSomething went wrong with phantomjs...');
+					console.log("\nSomething went wrong with phantomjs...");
 					if( stderr ){
 						console.log( stderr );
 					}
@@ -61,4 +61,4 @@
 
 	};
 
-}(typeof exports === 'object' && exports || this));
+}(typeof exports === "object" && exports || this));

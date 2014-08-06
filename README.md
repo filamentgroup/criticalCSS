@@ -8,9 +8,9 @@ Finds the Above the Fold CSS for your page, and outputs it into a file
 Install the module with: `npm install criticalcss`
 
 ```javascript
-var criticalcss = require('criticalcss');
+var criticalcss = require("criticalcss");
 
-criticalcss.findCritical('path/to/file/or/url', options (not required), function(err, output){
+criticalcss.findCritical("path/to/file/or/url", options (not required), function(err, output){
 	if( err ){
 		throw new Error( err );
 	} else {
@@ -29,7 +29,7 @@ Takes url or path to file, an options hash, and a callback function
 
 * `width`:  1200;
 * `height`: 900;
-* `filename`: 'all.css';
+* `filename`: "all.css";
 
 ## Examples
 Check out the tests!

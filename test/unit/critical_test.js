@@ -21,10 +21,10 @@
 /*global require:true*/
 /*global __dirname:true*/
 (function( exports ){
-	'use strict';
+	"use strict";
 
-	var path = require( 'path' );
-	var critical = require(path.join( '..', '..', 'critical.js') );
+	var path = require( "path" );
+	var critical = require(path.join( "..", "..", "critical.js") );
 
 
 	exports.findCritical = {
@@ -35,56 +35,56 @@
 		tearDown: function( done ){
 			done();
 		},
-		'no args': function(test) {
+		"no args": function(test) {
 			test.expect(1);
 			// tests here
 			test.throws( function(){
 				critical.findCritical();
-			}, TypeError, 'Should throw type error if there is no url' );
+			}, TypeError, "Should throw type error if there is no url" );
 			test.done();
 		},
-		'url given but is not string': function( test ){
+		"url given but is not string": function( test ){
 			test.expect(1);
 			// tests here
 			test.throws( function(){
 				critical.findCritical(5);
-			}, TypeError, 'Should throw type error if there is no url' );
+			}, TypeError, "Should throw type error if there is no url" );
 			test.done();
 		},
-		'url given - some content out of frame': function( test ){
+		"url given - some content out of frame": function( test ){
 			test.expect(1);
-			critical.findCritical( path.resolve( path.join( __dirname, '..', 'files', 'test-site.html' ) ), function( err, content ){
+			critical.findCritical( path.resolve( path.join( __dirname, "..", "files", "test-site.html" ) ), function( err, content ){
 				if( err ){
 					throw new Error( err );
 				} else {
-					test.equal( content, 'h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\n\n', 'Content should match' );
+					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\n\n", "Content should match" );
 				}
 				test.done();
 			});
 		},
-		'url given': function( test ){
+		"url given": function( test ){
 			test.expect(1);
 
-			critical.findCritical( path.resolve( path.join( __dirname, '..', 'files', 'test-site.html' ) ), { height: 1000 }, function( err, content ){
+			critical.findCritical( path.resolve( path.join( __dirname, "..", "files", "test-site.html" ) ), { height: 1000 }, function( err, content ){
 				if( err ){
 					throw new Error( err );
 				} else {
-					test.equal( content, 'h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n@media (min-width: 1100px){\ndiv{ font-size: 3em; }\n}', 'Content should match' );
+					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n@media (min-width: 1100px){\ndiv{ font-size: 3em; }\n}", "Content should match" );
 				}
 				test.done();
 			});
 		},
-		'url given - doesn\'t match MQ': function( test ){
+		"url given - doesn't match MQ": function( test ){
 			test.expect(1);
 
-			critical.findCritical( path.resolve( path.join( __dirname, '..', 'files', 'test-site.html' ) ), { width: 900, height: 1000 }, function( err, content ){
+			critical.findCritical( path.resolve( path.join( __dirname, "..", "files", "test-site.html" ) ), { width: 900, height: 1000 }, function( err, content ){
 				if( err ){
 					throw new Error( err );
 				} else {
-					test.equal( content, 'h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n', 'Content should match' );
+					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n", "Content should match" );
 				}
 				test.done();
 			});
 		}
 	};
-}(typeof exports === 'object' && exports || this));
+}(typeof exports === "object" && exports || this));

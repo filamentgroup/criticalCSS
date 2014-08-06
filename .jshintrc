@@ -12,5 +12,5 @@
 	"eqnull": true,
 	"node": true,
 	"es5": true,
-	"quotmark": "single"
+	"quotmark": "double"
 }
