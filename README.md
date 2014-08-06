@@ -41,5 +41,5 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 * v0.1.0 - Hey, released this thing
 
 ## License
-Copyright (c) 2014 Scott Jehl/Jeffrey Lembeck/Filament Group  
+Copyright (c) 2014 Scott Jehl/Jeffrey Lembeck/Filament Group
 Licensed under the MIT license.
