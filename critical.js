@@ -4,9 +4,9 @@
 (function( exports ){
 	"use strict";
 
-	var phantomJsPath = require('phantomjs').path;
-	var execFile = require('child_process').execFile;
-	var path = require( 'path' );
+	var phantomJsPath = require("phantomjs").path;
+	var execFile = require("child_process").execFile;
+	var path = require( "path" );
 
 	exports.findCritical = function( url, opts, cb ){
 		var defaultCb = function( err, output ){
@@ -38,7 +38,7 @@
 
 		execFile( phantomJsPath,
 			[
-				path.resolve( path.join( __dirname, 'lib', 'criticalrunner.js' ) ),
+				path.resolve( path.join( __dirname, "lib", "criticalrunner.js" ) ),
 				url,
 				filename,
 				width,
@@ -61,4 +61,4 @@
 
 	};
 
-}(typeof exports === 'object' && exports || this));
+}(typeof exports === "object" && exports || this));
