@@ -49,7 +49,7 @@
 				if( err ){
 					console.log("\nSomething went wrong with phantomjs...");
 					if( stderr ){
-						console.log( stderr );
+						err.message = stderr;
 					}
 					cb( err, null );
 				} else {
