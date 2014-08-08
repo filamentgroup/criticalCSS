@@ -40,7 +40,6 @@
 			cookies = JSON.stringify( cookies );
 		}
 
-
 		execFile( phantomJsPath,
 			[
 				path.resolve( path.join( __dirname, "lib", "criticalrunner.js" ) ),
@@ -59,7 +58,8 @@
 					}
 					cb( err, null );
 				} else {
-					cb( null, stdout );
+					var output = JSON.parse(stdout);
+					cb( null, output.css );
 				}
 
 			}
