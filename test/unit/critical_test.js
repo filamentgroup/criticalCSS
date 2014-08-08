@@ -86,10 +86,10 @@
 				test.done();
 			});
 		},
-		'url given - throws error if filename not found': function( test ){
+		"url given - throws error if filename not found": function( test ){
 			test.expect(1);
 
-			critical.findCritical( path.resolve( path.join( __dirname, '..', 'files', 'test-site.html' ) ), { width: 900, height: 1000, filename: "notthere.css" }, function(err){
+			critical.findCritical( path.resolve( path.join( __dirname, "..", "files", "test-site.html" ) ), { width: 900, height: 1000, filename: "notthere.css" }, function(err){
 				if( err ){
 					test.ok( err.message.match( "The filename you have given is not found at this url." ) );
 				}
