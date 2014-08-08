@@ -34,6 +34,11 @@
 		var width = opts.width || 1200;
 		var height = opts.height || 900;
 		var filename = opts.filename || "all.css";
+		var cookies = opts.cookies;
+
+		if( cookies ){
+			cookies = JSON.stringify( cookies );
+		}
 
 
 		execFile( phantomJsPath,
@@ -42,7 +47,8 @@
 				url,
 				filename,
 				width,
-				height
+				height,
+				cookies
 			],
 
 			function(err, stdout, stderr){
