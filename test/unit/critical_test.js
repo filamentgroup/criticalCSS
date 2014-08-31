@@ -19,7 +19,6 @@
 */
 
 /*global require:true*/
-/*global __dirname:true*/
 (function( exports ){
 	"use strict";
 
@@ -53,7 +52,7 @@
 		},
 		"url given - some content out of frame": function( test ){
 			test.expect(1);
-			critical.findCritical( path.resolve( path.join( __dirname, "..", "files", "test-site.html" ) ), function( err, content ){
+			critical.findCritical( "http://localhost:9001/test-site.html", function( err, content ){
 				if( err ){
 					throw new Error( err );
 				} else {
@@ -65,7 +64,7 @@
 		"url given": function( test ){
 			test.expect(1);
 
-			critical.findCritical( path.resolve( path.join( __dirname, "..", "files", "test-site.html" ) ), { height: 1000 }, function( err, content ){
+			critical.findCritical( "http://localhost:9001/test-site.html", { height: 1000 }, function( err, content ){
 				if( err ){
 					throw new Error( err );
 				} else {
@@ -77,7 +76,7 @@
 		"url given - doesn't match MQ": function( test ){
 			test.expect(1);
 
-			critical.findCritical( path.resolve( path.join( __dirname, "..", "files", "test-site.html" ) ), { width: 900, height: 1000 }, function( err, content ){
+			critical.findCritical( "http://localhost:9001/test-site.html", { width: 900, height: 1000 }, function( err, content ){
 				if( err ){
 					throw new Error( err );
 				} else {

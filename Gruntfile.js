@@ -1,6 +1,9 @@
 /*global module:true*/
+/*global require:true*/
 (function(){
 	"use strict";
+
+	var path = require( "path" );
 
 	module.exports = function(grunt) {
 
@@ -36,6 +39,14 @@
 					files: "<%= jshint.test.src %>",
 					tasks: ["jshint:test", "nodeunit"]
 				}
+			},
+			connect: {
+				server: {
+					options: {
+						port: 9001,
+						base: path.join( "test", "files" )
+					}
+				}
 			}
 		});
 
@@ -43,9 +54,10 @@
 		grunt.loadNpmTasks("grunt-contrib-nodeunit");
 		grunt.loadNpmTasks("grunt-contrib-jshint");
 		grunt.loadNpmTasks("grunt-contrib-watch");
+		grunt.loadNpmTasks("grunt-contrib-connect");
 
 		// Default task.
-		grunt.registerTask("default", ["jshint", "nodeunit"]);
+		grunt.registerTask("default", ["jshint", "connect", "nodeunit"]);
 
 	};
 }());
