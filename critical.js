@@ -8,6 +8,40 @@
 	var execFile = require("child_process").execFile;
 	var path = require( "path" );
 
+	exports.getRules = function( url, cb ){
+		var defaultCb = function( err, output ){
+			if( err ){
+				throw new Error( err );
+			} else {
+				console.log( output );
+			}
+		};
+
+		if( typeof url !== "string" ){
+			throw new TypeError( "URL must be a string" );
+		}
+
+		execFile( phantomJsPath,
+			[
+				path.resolve( path.join( __dirname, "lib", "rules.js" ) ),
+				url
+			],
+
+			function(err, stdout, stderr){
+				if( err ){
+					console.log("\nSomething went wrong with phantomjs...");
+					if( stderr ){
+						err.message = stderr;
+					}
+					cb( err, null );
+				} else {
+					cb( null, stdout );
+				}
+
+			}
+		);
+	};
+
 	exports.findCritical = function( url, opts, cb ){
 		var defaultCb = function( err, output ){
 			if( err ){
@@ -33,8 +67,8 @@
 
 		var width = opts.width || 1200;
 		var height = opts.height || 900;
-		var filename = opts.filename || "all.css";
 		var forceInclude = opts.forceInclude || [];
+		var rules = opts.rules || [];
 
 		if( !Array.isArray( forceInclude ) ){
 			throw new Error( "forceInclude must be an array of selectors" );
@@ -44,10 +78,10 @@
 			[
 				path.resolve( path.join( __dirname, "lib", "criticalrunner.js" ) ),
 				url,
-				filename,
 				width,
 				height,
-				JSON.stringify( forceInclude )
+				JSON.stringify( forceInclude ),
+				JSON.stringify( rules )
 			],
 
 			function(err, stdout, stderr){
