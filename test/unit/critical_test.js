@@ -56,7 +56,7 @@
 				if( err ){
 					throw new Error( err );
 				} else {
-					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\n\n", "Content should match" );
+					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }", "Content should match" );
 				}
 				test.done();
 			});
@@ -80,7 +80,7 @@
 				if( err ){
 					throw new Error( err );
 				} else {
-					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n", "Content should match" );
+					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }", "Content should match" );
 				}
 				test.done();
 			});
