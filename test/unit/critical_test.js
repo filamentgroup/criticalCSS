@@ -73,18 +73,6 @@
 				test.done();
 			});
 		},
-		"url given - doesn't match MQ": function( test ){
-			test.expect(1);
-
-			critical.findCritical( "http://localhost:9001/test-site.html", { width: 900, height: 1000 }, function( err, content ){
-				if( err ){
-					throw new Error( err );
-				} else {
-					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }", "Content should match" );
-				}
-				test.done();
-			});
-		},
 		"url given - throws error if filename not found": function( test ){
 			test.expect(1);
 
@@ -104,7 +92,7 @@
 				if( err ){
 					throw new Error( err );
 				} else {
-					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n.collapsible { text-indent: -9999px; }", "Content should match" );
+					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n.collapsible { text-indent: -9999px; }\n@media (min-width: 1100px){\ndiv{ font-size: 3em; }\n}", "Content should match" );
 				}
 				test.done();
 			});
@@ -116,6 +104,20 @@
 				critical.findCritical( "http://localhost:9001/test-site.html", { width: 900, height: 1000, forceInclude: ".collapsible" });
 			}, Error, "Must be array");
 			test.done();
+		},
+		"include forceInclude's parent media query": function( test ){
+			test.expect(1);
+
+			critical.findCritical( "http://localhost:9001/test-site-forcedmq.html",
+														{ width: 900, height: 1000, filename: "forcedmq.css", forceInclude: [".collapsible"] },
+														function( err, content ){
+				if( err ){
+					throw new Error( err );
+				} else {
+					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n@media (max-width: 30em){\n.collapsible { text-indent: -9999px; }\n}\n@media (min-width: 1100px){\ndiv{ font-size: 3em; }\n}", "Content should match" );
+				}
+				test.done();
+			});
 		}
 	};
 }(typeof exports === "object" && exports || this));
