@@ -34,7 +34,11 @@
 		var width = opts.width || 1200;
 		var height = opts.height || 900;
 		var filename = opts.filename || "all.css";
+		var forceInclude = opts.forceInclude || [];
 
+		if( !Array.isArray( forceInclude ) ){
+			throw new Error( "forceInclude must be an array of selectors" );
+		}
 
 		execFile( phantomJsPath,
 			[
@@ -42,7 +46,8 @@
 				url,
 				filename,
 				width,
-				height
+				height,
+				JSON.stringify( forceInclude )
 			],
 
 			function(err, stdout, stderr){

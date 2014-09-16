@@ -11,6 +11,10 @@ div {
 	margin-top: 900px;
 }
 
+.collapsible {
+	text-indent: -9999px;
+}
+
 @media (min-width: 1100px){
 	div {
 		font-size: 3em;

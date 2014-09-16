@@ -94,6 +94,28 @@
 				}
 				test.done();
 			});
+		},
+		"forceInclude includes selectors": function( test ){
+			test.expect(1);
+
+			critical.findCritical( "http://localhost:9001/test-site.html",
+														{ width: 900, height: 1000, forceInclude: [".collapsible"] },
+														function( err, content ){
+				if( err ){
+					throw new Error( err );
+				} else {
+					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n.collapsible { text-indent: -9999px; }", "Content should match" );
+				}
+				test.done();
+			});
+		},
+		"forceInclude expects array": function( test ){
+			test.expect(1);
+
+			test.throws(function(){
+				critical.findCritical( "http://localhost:9001/test-site.html", { width: 900, height: 1000, forceInclude: ".collapsible" });
+			}, Error, "Must be array");
+			test.done();
 		}
 	};
 }(typeof exports === "object" && exports || this));
