@@ -30,6 +30,7 @@ Takes url or path to file, an options hash, and a callback function
 * `width`:  1200;
 * `height`: 900;
 * `filename`: "all.css";
+* `forceInclude`: [];
 
 ## Examples
 Check out the tests!
@@ -38,6 +39,11 @@ Check out the tests!
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+* v0.3.0 - Added `forceInclude` functionality. This allows the user to
+  pass in an array of strings that are selectors. These selectors, if
+found in the CSS, will be treated as though they are above the fold and
+will therefore be automatically included.
+* v0.2.0 - Refactor
 * v0.1.0 - Hey, released this thing
 
 ## License
