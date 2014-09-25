@@ -118,6 +118,20 @@
 				}
 				test.done();
 			});
+		},
+		"display none should not show": function( test ){
+			test.expect(1);
+
+			critical.findCritical( "http://localhost:9001/test-site-with-display-none.html",
+														{ width: 900, height: 1000, filename: "all-with-display-none.css" },
+														function( err, content ){
+				if( err ){
+					throw new Error( err );
+				} else {
+					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n@media (min-width: 1100px){\ndiv{ font-size: 3em; }\n}", "Content should match" );
+				}
+				test.done();
+			});
 		}
 	};
 }(typeof exports === "object" && exports || this));
