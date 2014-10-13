@@ -28,6 +28,7 @@
 
 	var allJSRules = [{"cssText":"h1 { font-size: 2em; }","selectorText":"h1","cssRules":[]},{"cssText":"p { font-size: 1.5em; font-weight: bold; }","selectorText":"p","cssRules":[]},{"cssText":"div { font-size: 2.5em; font-weight: normal; margin-top: 900px; }","selectorText":"div","cssRules":[]},{"cssText":".collapsible { text-indent: -9999px; }","selectorText":".collapsible","cssRules":[]},{"media": {"0":"(min-width: 1100px)","length":1,"mediaText":"(min-width: 1100px)"},"cssText":"@media (min-width: 1100px) { \\n  div { font-size: 3em; }\\n}","cssRules":[{"cssText":"div { font-size: 3em; }","selectorText":"div","cssRules":[]}]}];
 	var forcedMQRules = [{"cssText":"h1 { font-size: 2em; }","selectorText":"h1","cssRules":[]},{"cssText":"p { font-size: 1.5em; font-weight: bold; }","selectorText":"p","cssRules":[]},{"cssText":"div { font-size: 2.5em; font-weight: normal; margin-top: 900px; }","selectorText":"div","cssRules":[]},{"media":{"0":"(max-width: 30em)","length":1,"mediaText":"(max-width: 30em)"},"cssText":"@media (max-width: 30em) { \n  .collapsible { text-indent: -9999px; }\n}","cssRules":[{"cssText":".collapsible { text-indent: -9999px; }","selectorText":".collapsible","cssRules":[]}]},{"media":{"0":"(min-width: 1100px)","length":1,"mediaText":"(min-width: 1100px)"},"cssText":"@media (min-width: 1100px) { \n  div { font-size: 3em; }\n}","cssRules":[{"cssText":"div { font-size: 3em; }","selectorText":"div","cssRules":[]}]}];
+	var displayNoneRules = [{"cssText":"h1 { font-size: 2em; }","selectorText":"h1","cssRules":[]},{"cssText":"p { font-size: 1.5em; font-weight: bold; }","selectorText":"p","cssRules":[]},{"cssText":"div { font-size: 2.5em; font-weight: normal; margin-top: 900px; }","selectorText":"div","cssRules":[]},{"cssText":".collapsible { text-indent: -9999px; }","selectorText":".collapsible","cssRules":[]},{"cssText":"span { display: none; }","selectorText":"span","cssRules":[]},{"media":{"0":"(min-width: 1100px)","length":1,"mediaText":"(min-width: 1100px)"},"cssText":"@media (min-width: 1100px) { \n  div { font-size: 3em; }\n}","cssRules":[{"cssText":"div { font-size: 3em; }","selectorText":"div","cssRules":[]}]}];
 
 	exports.findCritical = {
 		setUp: function(done) {
@@ -102,26 +103,12 @@
 			test.expect(1);
 
 			critical.findCritical( "http://localhost:9001/test-site-forcedmq.html",
-														{ width: 900, height: 1000, filename: "forcedmq.css", forceInclude: [".collapsible"], rules: forcedMQRules },
+														{ width: 900, height: 1000, forceInclude: [".collapsible"], rules: forcedMQRules },
 														function( err, content ){
 				if( err ){
 					throw new Error( err );
 				} else {
 					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n@media (max-width: 30em){\n.collapsible { text-indent: -9999px; }\n}\n@media (min-width: 1100px){\ndiv{ font-size: 3em; }\n}", "Content should match" );
-				}
-				test.done();
-			});
-		},
-		"display none should not show": function( test ){
-			test.expect(1);
-
-			critical.findCritical( "http://localhost:9001/test-site-with-display-none.html",
-														{ width: 900, height: 1000, filename: "all-with-display-none.css" },
-														function( err, content ){
-				if( err ){
-					throw new Error( err );
-				} else {
-					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n@media (min-width: 1100px){\ndiv{ font-size: 3em; }\n}", "Content should match" );
 				}
 				test.done();
 			});
