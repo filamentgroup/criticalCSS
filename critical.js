@@ -7,6 +7,8 @@
 	var phantomJsPath = require("phantomjs").path;
 	var execFile = require("child_process").execFile;
 	var path = require( "path" );
+	var fs = require( "fs" );
+	var os = require( "os" );
 
 	exports.getRules = function( url, cb ){
 		var defaultCb = function( err, output ){
@@ -21,11 +23,18 @@
 			throw new TypeError( "URL must be a string" );
 		}
 
+		if( !fs.existsSync( url ) ){
+			throw new Error( "CSS file must exist" );
+		}
+
 		execFile( phantomJsPath,
 			[
 				path.resolve( path.join( __dirname, "lib", "rules.js" ) ),
 				url
 			],
+			{
+				maxBuffer: 800*1024
+			},
 
 			function(err, stdout, stderr){
 				if( err ){
@@ -69,9 +78,21 @@
 		var height = opts.height || 900;
 		var forceInclude = opts.forceInclude || [];
 		var rules = opts.rules || [];
+		var tmpfile;
+
 
 		if( !Array.isArray( forceInclude ) ){
 			throw new Error( "forceInclude must be an array of selectors" );
+		}
+
+		var rulesString = JSON.stringify( rules );
+
+		//var MAX_ARG_STRLEN = 131072; // on unix machines, the longest string an argument can be
+		tmpfile = path.join( os.tmpdir(), "criticalcss-findcritical-rules" + (new Date()).getTime() );
+		try {
+			fs.writeFileSync( tmpfile, rulesString );
+		} catch( e ){
+			throw e;
 		}
 
 		execFile( phantomJsPath,
@@ -81,8 +102,11 @@
 				width,
 				height,
 				JSON.stringify( forceInclude ),
-				JSON.stringify( rules )
+				tmpfile
 			],
+			{
+				maxBuffer: 800*1024
+			},
 
 			function(err, stdout, stderr){
 				if( err ){
