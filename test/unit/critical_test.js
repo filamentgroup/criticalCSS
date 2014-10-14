@@ -173,6 +173,15 @@
 				}
 				test.done();
 			});
+		},
+		"opera dpi rules": function( test ){
+			critical.getRules(path.resolve(path.join(__dirname, "..", "files", "dpi.css")), function( err, content ){
+				// Just trying to avoid an error at this point, Phantom blows up on this MQ
+				if( err ){ throw err; }
+
+				test.equal( content, "[]");
+				test.done();
+			});
 		}
 	};
 }(typeof exports === "object" && exports || this));
