@@ -173,6 +173,14 @@
 				}
 				test.done();
 			});
+		},
+		"opera dpi rules": function( test ){
+			critical.getRules(path.resolve(path.join(__dirname, "..", "files", "dpi.css")), function( err, content ){
+				if( err ){ throw err; }
+
+				test.equal( content, "[{\"media\":{\"0\":\"only screen and (-o-min-device-pixel-ratio: 2/1)\",\"length\":1,\"mediaText\":\"only screen and (-o-min-device-pixel-ratio: 2/1)\"},\"cssText\":\"@media only screen and (-o-min-device-pixel-ratio: 2/1) { \\n  div { margin-left: 20px; }\\n}\",\"cssRules\":[{\"cssText\":\"div { margin-left: 20px; }\",\"selectorText\":\"div\",\"cssRules\":[]}]}]" );
+				test.done();
+			});
 		}
 	};
 }(typeof exports === "object" && exports || this));
