@@ -10,7 +10,9 @@
 	var fs = require( "fs" );
 	var os = require( "os" );
 
-	exports.getRules = function( url, cb ){
+	var DEFAULT_BUFFER_SIZE = 200*1024;
+
+	exports.getRules = function( url, opts, cb ){
 		var defaultCb = function( err, output ){
 			if( err ){
 				throw new Error( err );
@@ -27,13 +29,25 @@
 			throw new Error( "CSS file must exist" );
 		}
 
+		if( typeof opts === "undefined" && typeof cb === "undefined" ){
+			opts = {};
+			cb = defaultCb;
+		}
+
+		if( typeof opts === "function" ){
+			cb = opts;
+			opts = {};
+		}
+
+		var bufferSize = opts.buffer || DEFAULT_BUFFER_SIZE;
+
 		execFile( phantomJsPath,
 			[
 				path.resolve( path.join( __dirname, "lib", "rules.js" ) ),
 				url
 			],
 			{
-				maxBuffer: 800*1024
+				maxBuffer: bufferSize
 			},
 
 			function(err, stdout, stderr){
@@ -80,6 +94,8 @@
 		var rules = opts.rules || [];
 		var tmpfile;
 
+		var bufferSize = opts.buffer || DEFAULT_BUFFER_SIZE;
+
 
 		if( !Array.isArray( forceInclude ) ){
 			throw new Error( "forceInclude must be an array of selectors" );
@@ -105,7 +121,7 @@
 				tmpfile
 			],
 			{
-				maxBuffer: 800*1024
+				maxBuffer: bufferSize
 			},
 
 			function(err, stdout, stderr){
