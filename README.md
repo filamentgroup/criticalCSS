@@ -40,11 +40,48 @@ Takes url or path to file, an options hash, and a callback function
 * `height`: 900;
 * `forceInclude`: [];
 * `rules`: []; // REQUIRED
+* `buffer`: 800*1024;
+
+#### options.width
+Type: `Integer`
+Default value: `1200`
+
+The width of the window being used for determining "above the fold"
+
+#### options.height
+Type: `Integer`
+Default value: `900`
+
+The height of the window being used for determining "above the fold"
+
+#### options.forceInclude
+Type: `Array`
+Default value: `[]`
+
+An array of selectors that should be included in the critical css no
+matter what. This is sometimes necessary with js-enhanced components.
+
+#### options.rules
+Type: `Array`
+Default value: `[]`
+
+A `JSON.stringify`d version of a
+[CSSRuleList](https://developer.mozilla.org/en-US/docs/Web/API/CSSRuleList)
+
+#### options.buffer
+Type: `Integer`
+Default value: `800*1024`
+
+Sets the `maxBuffer` for [child_process.execFile](http://nodejs.org/api/child_process.html#child_process_child_process_execfile_file_args_options_callback) in Node.
+Necessary for potential memory issues.
 
 `.getRules`
 
 Takes a path to the CSS file and a callback function and returns a `JSON.stringify`'d subset of a `CSSRuleList`
 
+### Default values for options hash
+
+* `buffer`: 800*1024;
 
 ## Examples
 Check out the tests!
