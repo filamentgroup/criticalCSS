@@ -10,7 +10,7 @@
 	var fs = require( "fs" );
 	var os = require( "os" );
 
-	var DEFAULT_BUFFER_SIZE = 200*1024;
+	var DEFAULT_BUFFER_SIZE = 800*1024; //had this as the set val before, don't want to break things
 
 	exports.getRules = function( url, opts, cb ){
 		var defaultCb = function( err, output ){
