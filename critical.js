@@ -135,6 +135,9 @@
 					cb( null, stdout );
 				}
 
+				if( fs.existsSync(tmpfile) ){
+					fs.unlinkSync(tmpfile);
+				}
 			}
 		);
 

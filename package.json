@@ -1,7 +1,7 @@
 {
 	"name": "criticalcss",
 	"description": "Finds the Above the Fold CSS for your page, and outputs it into a file",
-	"version": "0.4.3",
+	"version": "0.4.4",
 	"homepage": "https://github.com/filamentgroup/criticalcss",
 	"author": {
 		"name": "Scott Jehl/Jeffrey Lembeck/Filament Group",
