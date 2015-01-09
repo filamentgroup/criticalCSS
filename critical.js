@@ -58,6 +58,9 @@
 					}
 					cb( err, null );
 				} else {
+					stdout = stdout.replace("Unsafe JavaScript attempt to access frame with URL about:blank from frame with URL ", "");
+					stdout = stdout.replace(/file:.*rules.js\./, "");
+					stdout = stdout.replace(" Domains, protocols and ports must match.\n\n", "");
 					cb( null, stdout );
 				}
 
