@@ -122,7 +122,8 @@
 				width,
 				height,
 				JSON.stringify( forceInclude ),
-				tmpfile
+				tmpfile,
+				'-ignoreConole'
 			],
 			{
 				maxBuffer: bufferSize
