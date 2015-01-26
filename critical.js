@@ -115,16 +115,21 @@
 			throw e;
 		}
 
-		execFile( phantomJsPath,
-			[
+		var execArgs = [
 				path.resolve( path.join( __dirname, "lib", "criticalrunner.js" ) ),
 				url,
 				width,
 				height,
 				JSON.stringify( forceInclude ),
-				tmpfile,
-				'-ignoreConole'
-			],
+				tmpfile
+		];
+
+		if( opts.ignoreConsole ){
+			execArgs.push( "--ignoreConsole" );
+		}
+
+		execFile( phantomJsPath,
+						 execArgs,
 			{
 				maxBuffer: bufferSize
 			},

@@ -41,6 +41,7 @@ Takes url or path to file, an options hash, and a callback function
 * `forceInclude`: [];
 * `rules`: []; // REQUIRED
 * `buffer`: 800*1024;
+* `ignoreConsole`: false;
 
 #### options.width
 Type: `Integer`
@@ -74,6 +75,14 @@ Default value: `800*1024`
 
 Sets the `maxBuffer` for [child_process.execFile](http://nodejs.org/api/child_process.html#child_process_child_process_execfile_file_args_options_callback) in Node.
 Necessary for potential memory issues.
+
+#### options.ignoreConsole
+Type: `Boolean`
+Default value: `false`
+
+Since criticalCSS handles output from STDOUT, it will also catch any
+outputs to `console` that are in the JavaScript on a page. If set to
+`true`, those will be silenced.
 
 `.getRules`
 
