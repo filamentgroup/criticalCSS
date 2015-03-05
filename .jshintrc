@@ -11,6 +11,5 @@
 	"boss": true,
 	"eqnull": true,
 	"node": true,
-	"es5": true,
 	"quotmark": "double"
 }
