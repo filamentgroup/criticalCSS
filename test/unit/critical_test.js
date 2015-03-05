@@ -227,6 +227,18 @@
 				}
 				test.done();
 			});
+		},
+		"don't expand": function( test ){
+			test.expect(1);
+			// tests here
+			critical.getRules(path.resolve(path.join(__dirname, "..", "files", "simple-border.css")), function( err, content ){
+				if( err ){
+					throw new Error( err );
+				} else {
+					test.equal( content, "[{\"cssText\":\"div { border: 1px solid black; }\",\"selectorText\":\"div\",\"cssRules\":[]}]", "Content should match" );
+				}
+				test.done();
+			});
 		}
 	};
 }(typeof exports === "object" && exports || this));
