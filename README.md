@@ -37,7 +37,7 @@ var criticalcss = require("criticalcss");
 var fs = require('fs');
 var tmpDir = require('os').tmpdir();
 
-var cssUrl = 'http:/site.com/style.css';
+var cssUrl = 'http://site.com/style.css';
 var cssPath = path.join( tmpDir, 'style.css' );
 request(cssUrl).pipe(fs.createWriteStream(cssPath)).on('close', function() {
   criticalcss.getRules(cssPath, function(err, output) {
