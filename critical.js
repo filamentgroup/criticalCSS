@@ -58,6 +58,10 @@
 					}
 					cb( err, null );
 				} else {
+					stdout = stdout.replace("Unsafe JavaScript attempt to access frame with URL about:blank from frame with URL ", "");
+					stdout = stdout.replace(/file:\/\/.*rules.js\./, "");
+					stdout = stdout.replace(" Domains, protocols and ports must match.\n\n", "");
+					stdout = stdout.replace(" Domains, protocols and ports must match.\r\n\r\n", ""); //windows
 					cb( null, stdout );
 				}
 
@@ -111,15 +115,21 @@
 			throw e;
 		}
 
-		execFile( phantomJsPath,
-			[
+		var execArgs = [
 				path.resolve( path.join( __dirname, "lib", "criticalrunner.js" ) ),
 				url,
 				width,
 				height,
 				JSON.stringify( forceInclude ),
 				tmpfile
-			],
+		];
+
+		if( opts.ignoreConsole ){
+			execArgs.push( "--ignoreConsole" );
+		}
+
+		execFile( phantomJsPath,
+						 execArgs,
 			{
 				maxBuffer: bufferSize
 			},

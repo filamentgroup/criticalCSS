@@ -26,7 +26,34 @@ criticalcss.getRules("path/to/css/file/", function(err, output){
   }
 });
 
+```
 
+Using both together:
+
+```JavaScript
+var request = require('request');
+var path = require( 'path' );
+var criticalcss = require("criticalcss");
+var fs = require('fs');
+var tmpDir = require('os').tmpdir();
+
+var cssUrl = 'http://site.com/style.css';
+var cssPath = path.join( tmpDir, 'style.css' );
+request(cssUrl).pipe(fs.createWriteStream(cssPath)).on('close', function() {
+  criticalcss.getRules(cssPath, function(err, output) {
+    if (err) {
+      throw new Error(err);
+    } else {
+      criticalcss.findCritical("https://site.com/", { rules: JSON.parse(output) }, function(err, output) {
+        if (err) {
+          throw new Error(err);
+        } else {
+          console.log(output);
+        }
+      });
+    }
+  });
+});
 ```
 
 ## Documentation
@@ -41,6 +68,7 @@ Takes url or path to file, an options hash, and a callback function
 * `forceInclude`: [];
 * `rules`: []; // REQUIRED
 * `buffer`: 800*1024;
+* `ignoreConsole`: false;
 
 #### options.width
 Type: `Integer`
@@ -75,6 +103,14 @@ Default value: `800*1024`
 Sets the `maxBuffer` for [child_process.execFile](http://nodejs.org/api/child_process.html#child_process_child_process_execfile_file_args_options_callback) in Node.
 Necessary for potential memory issues.
 
+#### options.ignoreConsole
+Type: `Boolean`
+Default value: `false`
+
+Since criticalCSS handles output from STDOUT, it will also catch any
+outputs to `console` that are in the JavaScript on a page. If set to
+`true`, those will be silenced.
+
 `.getRules`
 
 Takes a path to the CSS file and a callback function and returns a `JSON.stringify`'d subset of a `CSSRuleList`
@@ -90,6 +126,7 @@ Check out the tests!
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+* v0.5.0 - Add `ignoreConsole` option
 * v0.4.0 - Moved to using a local filename for `getRules` and moved to passing in a required `Array` of rules into the options hash on `findCritical`
 * v0.3.0 - Added `forceInclude` functionality. This allows the user to
   pass in an array of strings that are selectors. These selectors, if

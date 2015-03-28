@@ -1,0 +1,30 @@
+h1 {
+	font-size: 2em;
+}
+p {
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+.collapsible {
+	text-indent: -9999px;
+}
+
+.clear-container:before,
+.clear-container:after {
+	content: " ";
+	display: table;
+}
+.clear-container:after {
+	clear: both;
+}
+
+.clear {
+	float: left;
+}
+
+@media (min-width: 1100px){
+	div {
+		font-size: 3em;
+	}
+}
