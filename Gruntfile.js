@@ -56,9 +56,10 @@
 		grunt.loadNpmTasks("grunt-contrib-watch");
 		grunt.loadNpmTasks("grunt-contrib-connect");
 
+		grunt.registerTask("test", ["jshint", "connect", "nodeunit"]);
+
 		// Default task.
-		grunt.registerTask("default", ["jshint", "connect", "nodeunit"]);
+		grunt.registerTask("default", ["test"]);
 
 	};
 }());
-
