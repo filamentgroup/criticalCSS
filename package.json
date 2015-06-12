@@ -16,12 +16,7 @@
 		"url": "https://github.com/filamentgroup/criticalcss/issues"
 	},
 	"main": "./critical.js",
-	"licenses": [
-		{
-			"type": "MIT",
-			"url": "https://github.com/filamentgroup/criticalcss/blob/master/LICENSE-MIT"
-		}
-	],
+	"license": "MIT",
 	"engines": {
 		"node": ">= 0.10.0"
 	},
