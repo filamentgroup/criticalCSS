@@ -119,6 +119,34 @@ Takes a path to the CSS file and a callback function and returns a `JSON.stringi
 
 * `buffer`: 800*1024;
 
+## CLI?
+
+Sure, we got that.
+
+```
+
+Commands:
+  run  Run criticalcss
+
+Options:
+  --help                   Show help                                   [boolean]
+  -u, --url                The url you would like to run criticalcss against
+                                                             [string] [required]
+  -f, --file               The local css file you're referencing for criticalcss
+                                                             [string] [required]
+  -w, --width              The width of your viewport            [default: 1200]
+  -h, --height             The height of your viewport            [default: 900]
+  -o, --output             The name of your output css file
+                                             [string] [default: "dist/dist.css"]
+  -b, --buffer             Specifies the largest amount of data allowed on
+                           stdout or stderr - if this value is exceeded then the
+                           child process is killed             [default: 819200]
+  --force, --forceInclude  Sometimes selectors need to be forced into the
+                           criticalcss                     [array] [default: []]
+  -i, --ignoreConsole      Criticalcss will pick up console errors, set this to
+                           ignore them                [boolean] [default: false]
+
+```
 ## Examples
 Check out the tests!
 
