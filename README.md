@@ -126,6 +126,7 @@ Check out the tests!
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+* v0.6.0 - Add a CLI version
 * v0.5.0 - Add `ignoreConsole` option
 * v0.4.0 - Moved to using a local filename for `getRules` and moved to passing in a required `Array` of rules into the options hash on `findCritical`
 * v0.3.0 - Added `forceInclude` functionality. This allows the user to
