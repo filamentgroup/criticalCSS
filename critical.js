@@ -12,7 +12,7 @@
 
 	var DEFAULT_BUFFER_SIZE = 800*1024; //had this as the set val before, don't want to break things
 
-	exports.getRules = function( url, opts, cb ){
+	exports.getRules = function( cssfile, opts, cb ){
 		var defaultCb = function( err, output ){
 			if( err ){
 				throw new Error( err );
@@ -21,11 +21,11 @@
 			}
 		};
 
-		if( typeof url !== "string" ){
-			throw new TypeError( "URL must be a string" );
+		if( typeof cssfile !== "string" ){
+			throw new TypeError( "The CSS filename must be a string" );
 		}
 
-		if( !fs.existsSync( url ) ){
+		if( !fs.existsSync( cssfile ) ){
 			throw new Error( "CSS file must exist" );
 		}
 
@@ -44,7 +44,7 @@
 		execFile( phantomJsPath,
 			[
 				path.resolve( path.join( __dirname, "lib", "rules.js" ) ),
-				url
+				cssfile
 			],
 			{
 				maxBuffer: bufferSize
