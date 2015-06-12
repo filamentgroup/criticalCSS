@@ -1,43 +1,44 @@
 {
-	"name": "criticalcss",
-	"description": "Finds the Above the Fold CSS for your page, and outputs it into a file",
-	"version": "0.5.1",
-	"homepage": "https://github.com/filamentgroup/criticalcss",
-	"author": {
-		"name": "Scott Jehl/Jeffrey Lembeck/Filament Group",
-		"email": "hello@filamentgroup.com",
-		"url": "http://filamentgroup.com"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/filamentgroup/criticalcss.git"
-	},
-	"bugs": {
-		"url": "https://github.com/filamentgroup/criticalcss/issues"
-	},
+  "name": "criticalcss",
+  "description": "Finds the Above the Fold CSS for your page, and outputs it into a file",
+  "version": "0.5.1",
+  "homepage": "https://github.com/filamentgroup/criticalcss",
+  "author": {
+    "name": "Scott Jehl/Jeffrey Lembeck/Filament Group",
+    "email": "hello@filamentgroup.com",
+    "url": "http://filamentgroup.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/filamentgroup/criticalcss.git"
+  },
+  "bugs": {
+    "url": "https://github.com/filamentgroup/criticalcss/issues"
+  },
   "bin": {
     "criticalcss": "bin/critical.js"
   },
-	"main": "./critical.js",
-	"license": "MIT",
-	"engines": {
-		"node": ">= 0.10.0"
-	},
-	"scripts": {
-		"test": "node node_modules/.bin/grunt test"
-	},
-	"dependencies": {
-		"phantomjs": "1.9.13"
-	},
-	"devDependencies": {
-		"grunt": "^0.4.5",
-		"grunt-cli": "^0.1.13",
-		"grunt-contrib-connect": "0.8.0",
-		"grunt-contrib-jshint": "^0.11.0",
-		"grunt-contrib-nodeunit": "^0.4.1",
-		"grunt-contrib-qunit": "^0.5.2",
-		"grunt-contrib-watch": "^0.6.1",
-		"phantom-unit": "0.1.1"
-	},
-	"keywords": []
+  "main": "./critical.js",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "scripts": {
+    "test": "node node_modules/.bin/grunt test"
+  },
+  "dependencies": {
+    "phantomjs": "1.9.13",
+    "yargs": "^3.10.0"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-connect": "0.8.0",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-nodeunit": "^0.4.1",
+    "grunt-contrib-qunit": "^0.5.2",
+    "grunt-contrib-watch": "^0.6.1",
+    "phantom-unit": "0.1.1"
+  },
+  "keywords": []
 }
