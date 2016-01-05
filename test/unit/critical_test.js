@@ -29,6 +29,8 @@
 	var allJSRules = [{"cssText":"h1 { font-size: 2em; }","selectorText":"h1","cssRules":[]},{"cssText":"p { font-size: 1.5em; font-weight: bold; }","selectorText":"p","cssRules":[]},{"cssText":"div { font-size: 2.5em; font-weight: normal; margin-top: 900px; }","selectorText":"div","cssRules":[]},{"cssText":".collapsible { text-indent: -9999px; }","selectorText":".collapsible","cssRules":[]},{"media": {"0":"(min-width: 1100px)","length":1,"mediaText":"(min-width: 1100px)"},"cssText":"@media (min-width: 1100px) { \\n  div { font-size: 3em; }\\n}","cssRules":[{"cssText":"div { font-size: 3em; }","selectorText":"div","cssRules":[]}]}];
 	var allJSRulesPrint = [{"cssText":"h1 { font-size: 2em; }","selectorText":"h1","cssRules":[]},{"cssText":"p { font-size: 1.5em; font-weight: bold; }","selectorText":"p","cssRules":[]},{"cssText":"div { font-size: 2.5em; font-weight: normal; margin-top: 900px; }","selectorText":"div","cssRules":[]},{"cssText":".collapsible { text-indent: -9999px; }","selectorText":".collapsible","cssRules":[]},{"media":{"0":"(min-width: 1100px)","length":1,"mediaText":"(min-width: 1100px)"},"cssText":"@media (min-width: 1100px) { \\n  div { font-size: 3em; }\\n}","cssRules":[{"cssText":"div { font-size: 3em; }","selectorText":"div","cssRules":[]}]},{"media":{"0":"print","length":1,"mediaText":"print"},"cssText":"@media print { \\n  .mast-shop-search-bag, .mast-shop-notes, .mast-shop-nav-body nav, .receipt-btns { display: none; }\\n}","cssRules":[{"cssText":".mast-shop-search-bag, .mast-shop-notes, .mast-shop-nav-body nav, .receipt-btns { display: none; }","selectorText":".mast-shop-search-bag, .mast-shop-notes, .mast-shop-nav-body nav, .receipt-btns","cssRules":[]}]}];
 	var forcedMQRules = [{"cssText":"h1 { font-size: 2em; }","selectorText":"h1","cssRules":[]},{"cssText":"p { font-size: 1.5em; font-weight: bold; }","selectorText":"p","cssRules":[]},{"cssText":"div { font-size: 2.5em; font-weight: normal; margin-top: 900px; }","selectorText":"div","cssRules":[]},{"media":{"0":"(max-width: 30em)","length":1,"mediaText":"(max-width: 30em)"},"cssText":"@media (max-width: 30em) { \n  .collapsible { text-indent: -9999px; }\n}","cssRules":[{"cssText":".collapsible { text-indent: -9999px; }","selectorText":".collapsible","cssRules":[]}]},{"media":{"0":"(min-width: 1100px)","length":1,"mediaText":"(min-width: 1100px)"},"cssText":"@media (min-width: 1100px) { \n  div { font-size: 3em; }\n}","cssRules":[{"cssText":"div { font-size: 3em; }","selectorText":"div","cssRules":[]}]}];
+	var offsetTestRules = [{"cssText":"body { color: green; }","selectorText":"body","cssRules":[]},{"cssText":".offsettest { position: relative; margin-top: 900px; }","selectorText":".offsettest","cssRules":[]},{"cssText":".offsettest em { position: absolute; }","selectorText":".offsettest em","cssRules":[]}];
+	var offsetTestCritRules = "body{ color: green; }";
 
 	exports.findCritical = {
 		setUp: function(done) {
@@ -109,6 +111,20 @@
 					throw new Error( err );
 				} else {
 					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n@media (max-width: 30em){\n.collapsible { text-indent: -9999px; }\n}\n@media (min-width: 1100px){\ndiv{ font-size: 3em; }\n}", "Content should match" );
+				}
+				test.done();
+			});
+		},
+		"element positioned within a relative parent should still be excluded from crit css when outside viewport region": function( test ){
+			test.expect(1);
+
+			critical.findCritical( "http://localhost:9001/test-offset.html",
+														{ width: 500, height: 500, rules: offsetTestRules },
+														function( err, content ){
+				if( err ){
+					throw new Error( err );
+				} else {
+					test.equal( content, offsetTestCritRules, "Content should match" );
 				}
 				test.done();
 			});
