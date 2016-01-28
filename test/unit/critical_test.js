@@ -215,15 +215,6 @@
 				test.done();
 			});
 		},
-		"opera dpi rules": function( test ){
-			critical.getRules(path.resolve(path.join(__dirname, "..", "files", "dpi.css")), function( err, content ){
-				// Just trying to avoid an error at this point, Phantom blows up on this MQ
-				if( err ){ throw err; }
-
-				test.equal( content, "[]");
-				test.done();
-			});
-		},
 		"pseudo-selector": function( test ){
 			test.expect(1);
 			// tests here
@@ -249,6 +240,18 @@
 										"{ \\n  div { font-size: 3em; }\\n}\"," +
 										"\"cssRules\":[{\"cssText\":\"div { font-size: 3em; }\"," +
 										"\"selectorText\":\"div\",\"cssRules\":[]}]}]", "Content should match" );
+				}
+				test.done();
+			});
+		},
+		"don't expand": function( test ){
+			test.expect(1);
+			// tests here
+			critical.getRules(path.resolve(path.join(__dirname, "..", "files", "simple-border.css")), function( err, content ){
+				if( err ){
+					throw new Error( err );
+				} else {
+					test.equal( content, "[{\"cssText\":\"div { border: 1px solid black; }\",\"selectorText\":\"div\",\"cssRules\":[]}]", "Content should match" );
 				}
 				test.done();
 			});
