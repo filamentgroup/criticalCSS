@@ -4,7 +4,7 @@
 (function( exports ){
 	"use strict";
 
-	var phantomJsPath = require("phantomjs").path;
+	var phantomJsPath = require("phantomjs-prebuilt").path;
 	var execFile = require("child_process").execFile;
 	var path = require( "path" );
 	var fs = require( "fs" );
