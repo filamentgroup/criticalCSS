@@ -116,12 +116,13 @@
 		}
 
 		var execArgs = [
-				path.resolve( path.join( __dirname, "lib", "criticalrunner.js" ) ),
-				url,
-				width,
-				height,
-				JSON.stringify( forceInclude ),
-				tmpfile
+			path.resolve( path.join( __dirname, "lib", "criticalrunner.js" ) ),
+			url,
+			width,
+			height,
+			JSON.stringify( forceInclude ),
+			JSON.stringify( opts.initialMap || {}),
+			tmpfile
 		];
 
 		if( opts.ignoreConsole ){

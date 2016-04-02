@@ -20,6 +20,7 @@
 
 /*global require:true*/
 /*global __dirname:true*/
+/*jshint elision:true*/
 (function( exports ){
 	"use strict";
 
@@ -27,7 +28,10 @@
 	var critical = require(path.join( "..", "..", "critical.js") );
 
 	var allJSRules = [{"cssText":"h1 { font-size: 2em; }","selectorText":"h1","cssRules":[]},{"cssText":"p { font-size: 1.5em; font-weight: bold; }","selectorText":"p","cssRules":[]},{"cssText":"div { font-size: 2.5em; font-weight: normal; margin-top: 900px; }","selectorText":"div","cssRules":[]},{"cssText":".collapsible { text-indent: -9999px; }","selectorText":".collapsible","cssRules":[]},{"media": {"0":"(min-width: 1100px)","length":1,"mediaText":"(min-width: 1100px)"},"cssText":"@media (min-width: 1100px) { \\n  div { font-size: 3em; }\\n}","cssRules":[{"cssText":"div { font-size: 3em; }","selectorText":"div","cssRules":[]}]}];
-	var allJSRulesPrint = [{"cssText":"h1 { font-size: 2em; }","selectorText":"h1","cssRules":[]},{"cssText":"p { font-size: 1.5em; font-weight: bold; }","selectorText":"p","cssRules":[]},{"cssText":"div { font-size: 2.5em; font-weight: normal; margin-top: 900px; }","selectorText":"div","cssRules":[]},{"cssText":".collapsible { text-indent: -9999px; }","selectorText":".collapsible","cssRules":[]},{"media":{"0":"(min-width: 1100px)","length":1,"mediaText":"(min-width: 1100px)"},"cssText":"@media (min-width: 1100px) { \\n  div { font-size: 3em; }\\n}","cssRules":[{"cssText":"div { font-size: 3em; }","selectorText":"div","cssRules":[]}]},{"media":{"0":"print","length":1,"mediaText":"print"},"cssText":"@media print { \\n  .mast-shop-search-bag, .mast-shop-notes, .mast-shop-nav-body nav, .receipt-btns { display: none; }\\n}","cssRules":[{"cssText":".mast-shop-search-bag, .mast-shop-notes, .mast-shop-nav-body nav, .receipt-btns { display: none; }","selectorText":".mast-shop-search-bag, .mast-shop-notes, .mast-shop-nav-body nav, .receipt-btns","cssRules":[]}]}];
+
+	var allJSRulesInitial = [{"cssText":"h1 { font-size: 2em; }","selectorText":"h1","cssRules":[]},{"cssText":"p { font-size: 1.5em; font-weight: bold; }","selectorText":"p","cssRules":[]},{"cssText":"div { font-size: 2.5em; font-weight: normal; margin-top: 900px; }","selectorText":"div","cssRules":[]},{"cssText":".collapsible { text-indent: -9999px; }","selectorText":".collapsible","cssRules":[]},{"cssText": "body { background-repeat: initial initial; }","selectorText": "body", "cssRules": []},{"media": {"0":"(min-width: 1100px)","length":1,"mediaText":"(min-width: 1100px)"},"cssText":"@media (min-width: 1100px) { \\n  div { font-size: 3em; }\\n}","cssRules":[{"cssText":"div { font-size: 3em; }","selectorText":"div","cssRules":[]}]}];
+
+var allJSRulesPrint = [{"cssText":"h1 { font-size: 2em; }","selectorText":"h1","cssRules":[]},{"cssText":"p { font-size: 1.5em; font-weight: bold; }","selectorText":"p","cssRules":[]},{"cssText":"div { font-size: 2.5em; font-weight: normal; margin-top: 900px; }","selectorText":"div","cssRules":[]},{"cssText":".collapsible { text-indent: -9999px; }","selectorText":".collapsible","cssRules":[]},{"media":{"0":"(min-width: 1100px)","length":1,"mediaText":"(min-width: 1100px)"},"cssText":"@media (min-width: 1100px) { \\n  div { font-size: 3em; }\\n}","cssRules":[{"cssText":"div { font-size: 3em; }","selectorText":"div","cssRules":[]}]},{"media":{"0":"print","length":1,"mediaText":"print"},"cssText":"@media print { \\n  .mast-shop-search-bag, .mast-shop-notes, .mast-shop-nav-body nav, .receipt-btns { display: none; }\\n}","cssRules":[{"cssText":".mast-shop-search-bag, .mast-shop-notes, .mast-shop-nav-body nav, .receipt-btns { display: none; }","selectorText":".mast-shop-search-bag, .mast-shop-notes, .mast-shop-nav-body nav, .receipt-btns","cssRules":[]}]}];
 	var forcedMQRules = [{"cssText":"h1 { font-size: 2em; }","selectorText":"h1","cssRules":[]},{"cssText":"p { font-size: 1.5em; font-weight: bold; }","selectorText":"p","cssRules":[]},{"cssText":"div { font-size: 2.5em; font-weight: normal; margin-top: 900px; }","selectorText":"div","cssRules":[]},{"media":{"0":"(max-width: 30em)","length":1,"mediaText":"(max-width: 30em)"},"cssText":"@media (max-width: 30em) { \n  .collapsible { text-indent: -9999px; }\n}","cssRules":[{"cssText":".collapsible { text-indent: -9999px; }","selectorText":".collapsible","cssRules":[]}]},{"media":{"0":"(min-width: 1100px)","length":1,"mediaText":"(min-width: 1100px)"},"cssText":"@media (min-width: 1100px) { \n  div { font-size: 3em; }\n}","cssRules":[{"cssText":"div { font-size: 3em; }","selectorText":"div","cssRules":[]}]}];
 	var offsetTestRules = [{"cssText":"body { color: green; }","selectorText":"body","cssRules":[]},{"cssText":".offsettest { position: relative; margin-top: 900px; }","selectorText":".offsettest","cssRules":[]},{"cssText":".offsettest em { position: absolute; }","selectorText":".offsettest em","cssRules":[]}];
 	var offsetTestCritRules = "body{ color: green; }";
@@ -162,6 +166,30 @@
 				} else {
 					test.equal( content, "h1{ font-size: 2em; }\np{ font-size: 1.5em; font-weight: bold; }\ndiv{ font-size: 2.5em; font-weight: normal; margin-top: 900px; }\n@media (min-width: 1100px){\ndiv{ font-size: 3em; }\n}", "Content should match" );
 				}
+				test.done();
+			});
+		},
+
+		"maps no values in css without config" : function( test ){
+			critical.findCritical( "http://localhost:9001/test-site-print.html", {
+				rules: allJSRulesInitial
+			}, function(err, content){
+				if( err ) { throw new Error( err ); }
+				test.ok(/background-repeat: initial initial;/.test(content));
+				test.done();
+			});
+		},
+
+		"maps initial values in css according to config" : function( test ){
+			critical.findCritical( "http://localhost:9001/test-site-print.html", {
+				rules: allJSRulesInitial,
+				initialMap: {
+					"background-repeat" : "0%"
+				}
+			}, function(err, content){
+				if( err ) { throw new Error( err ); }
+				test.ok(!/initial initial/.test(content));
+				test.ok(/background-repeat: 0% 0%;/.test(content));
 				test.done();
 			});
 		}
