@@ -184,12 +184,12 @@ var allJSRulesPrint = [{"cssText":"h1 { font-size: 2em; }","selectorText":"h1","
 			critical.findCritical( "http://localhost:9001/test-site-print.html", {
 				rules: allJSRulesInitial,
 				initialMap: {
-					"background-repeat" : "0%"
+					"background-repeat" : "repeat"
 				}
 			}, function(err, content){
 				if( err ) { throw new Error( err ); }
 				test.ok(!/initial initial/.test(content));
-				test.ok(/background-repeat: 0% 0%;/.test(content));
+				test.ok(/background-repeat: repeat repeat;/.test(content));
 				test.done();
 			});
 		}
