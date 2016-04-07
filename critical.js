@@ -9,6 +9,7 @@
 	var path = require( "path" );
 	var fs = require( "fs" );
 	var os = require( "os" );
+	var cssnext = require( "postcss-cssnext" );
 
 	var DEFAULT_BUFFER_SIZE = 800*1024; //had this as the set val before, don't want to break things
 
@@ -96,6 +97,7 @@
 		var height = opts.height || 900;
 		var forceInclude = opts.forceInclude || [];
 		var rules = opts.rules || [];
+		var useCSSnext = opts.cssnext;
 		var tmpfile;
 
 		var bufferSize = opts.buffer || DEFAULT_BUFFER_SIZE;
@@ -142,6 +144,12 @@
 					}
 					cb( err, null );
 				} else {
+					var output = stdout;
+
+					if( useCSSnext ){
+						output = cssnext(output);
+					}
+
 					cb( null, stdout );
 				}
 
