@@ -146,7 +146,7 @@
 				} else {
 					if( usepostcss ){
 						postcss([ require('postcss-initial') ])
-							.process(stdout, {replace: true})
+							.process(stdout)
 							.then(function (result) {
 								cb(null, result.css);
 							});
