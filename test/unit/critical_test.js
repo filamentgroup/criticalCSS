@@ -178,21 +178,21 @@
 				rules: allJSRulesInitial,
 			}, function(err, content){
 				if( err ) { throw new Error( err ); }
-				console.log(content);
 				test.ok(/background-repeat: initial initial;/.test(content));
 				test.done();
 			});
 		},
 
-		"maps initial values in css" : function( test ){
+		"maps initial values in css to fallbacks" : function( test ){
 			critical.findCritical( "http://localhost:9001/test-site-print.html", {
 				rules: allJSRulesInitial,
-				cssnext: true
+				postcss: true
 			}, function(err, content){
-				console.log(content);
 				if( err ) { throw new Error( err ); }
-				test.ok(!/initial initial/.test(content));
-				test.ok(/background-repeat: repeat repeat;/.test(content));
+				test.ok(
+						/background-repeat: repeat repeat; background-repeat: initial initial;/
+						.test(content)
+				);
 				test.done();
 			});
 		}
