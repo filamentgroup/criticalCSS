@@ -9,6 +9,7 @@
 	var path = require( "path" );
 	var fs = require( "fs" );
 	var os = require( "os" );
+	var postcss = require( "postcss" );
 
 	var DEFAULT_BUFFER_SIZE = 800*1024; //had this as the set val before, don't want to break things
 
@@ -96,6 +97,7 @@
 		var height = opts.height || 900;
 		var forceInclude = opts.forceInclude || [];
 		var rules = opts.rules || [];
+		var usepostcss = opts.postcss;
 		var tmpfile;
 
 		var bufferSize = opts.buffer || DEFAULT_BUFFER_SIZE;
@@ -142,6 +144,16 @@
 					}
 					cb( err, null );
 				} else {
+					if( usepostcss ){
+						postcss([ require('postcss-initial') ])
+							.process(stdout)
+							.then(function (result) {
+								cb(null, result.css);
+							});
+
+						return;
+					}
+
 					cb( null, stdout );
 				}
 
