@@ -167,7 +167,7 @@
 
 	};
 
-	exports.installOriginalDefinitions = function(originalCSS, criticalCSS, stringifyOpts){
+	exports.restoreOriginalDefs = function(originalCSS, criticalCSS, stringifyOpts){
 		// parse both the original CSS and the critical CSS so we can deal with the
 		// ASTs directly
 		var originalAST = css.parse(originalCSS);
