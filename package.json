@@ -40,7 +40,7 @@
     "grunt-contrib-nodeunit": "^0.4.1",
     "grunt-contrib-qunit": "^0.5.2",
     "grunt-contrib-watch": "^0.6.1",
-    "phantom-unit": "0.1.1"
+    "phantom-unit": "^1.0.1"
   },
   "keywords": []
 }
