@@ -10,6 +10,8 @@
 	var fs = require( "fs" );
 	var os = require( "os" );
 	var postcss = require( "postcss" );
+	var css = require('css');
+	var _ = require("lodash");
 
 	var DEFAULT_BUFFER_SIZE = 800*1024; //had this as the set val before, don't want to break things
 
@@ -163,6 +165,31 @@
 			}
 		);
 
+	};
+
+	exports.installOriginalDefinitions = function(originalCSS, criticalCSS, stringifyOpts){
+		// parse both the original CSS and the critical CSS so we can deal with the
+		// ASTs directly
+		var originalAST = css.parse(originalCSS);
+		var criticalAST = css.parse(criticalCSS);
+
+		// for all rules that are in the criticalCSS AST replace them with the
+		// original rule definitions from the original AST
+		var newRules = criticalAST.stylesheet.rules.map(function(criticalRule){
+
+			// find the original definition in the original AST and replace the
+			// criticalCSS definition with it
+			var originalRule = _.find(originalAST.stylesheet.rules, function(rule){
+				return _.isEqual(rule.selectors, criticalRule.selectors);
+			});
+
+			return originalRule || criticalRule;
+		});
+
+		criticalAST.stylesheet.rules = newRules;
+
+		// return the CSS as a string
+		return css.stringify(criticalAST, stringifyOpts);
 	};
 
 }(typeof exports === "object" && exports || this));
