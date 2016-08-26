@@ -1,5 +1,4 @@
 /*global require:true*/
-/*global __dirname:true*/
 (function( exports ){
 	"use strict";
 
