@@ -9,7 +9,8 @@
 		test.expect(1);
 
 		var result = critical
-					.restoreOriginalDefs(opts.original, opts.critical, { compress: true });
+					.restoreOriginalDefs(opts.original, opts.critical, { compress: true })
+					.replace(/\s/g, "");
 
 		test.equal(result, opts.expected.replace(/\s/g, ""));
 		test.done();
@@ -37,6 +38,14 @@
 				original: "body { color: red; } div.removed {}",
 				critical: "body {}",
 				expected: "body { color:red; }"
+			});
+		},
+
+		"includes media queries": function(test) {
+			testDefs(test, {
+				original: "@media (max-width: 600px) { body { color: red; } div.removed {} }",
+				critical: "@media (max-width: 600px) { body {} }",
+				expected: "@media (max-width: 600px) { body { color:red; } }"
 			});
 		}
 	};
