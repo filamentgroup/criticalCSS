@@ -2,8 +2,15 @@
 (function( exports ){
 	"use strict";
 
-	var path = require( "path" );
+	var path = require("path");
 	var critical = require(path.join( "..", "..", "critical.js") );
+	var fs = require("fs");
+
+	function readTestCSSFile(name){
+		return fs
+			.readFileSync(path.join(__dirname, "..", "files", name + ".css"))
+			.toString();
+	}
 
 	function testDefs(test, opts) {
 		test.expect(1);
@@ -46,6 +53,14 @@
 				original: "@media (max-width: 600px) { body { color: red; } } @media (max-width: 400px) { body { color: red; } }",
 				critical: "@media (max-width: 600px) { body {} }",
 				expected: "@media (max-width: 600px) { body { color:red; } }"
+			});
+		},
+
+		"includes complex media queries": function(test) {
+			testDefs(test, {
+				original: readTestCSSFile("media"),
+				critical: readTestCSSFile("media-critical"),
+				expected: readTestCSSFile("media-expected")
 			});
 		}
 	};

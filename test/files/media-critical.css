@@ -1,0 +1,8 @@
+@media (min-width:50em){
+  .bio{font-size:1em;}
+  .bio img{float:left;}
+}
+
+.baz {}
+
+.foo {}
