@@ -1,4 +1,5 @@
 .foo{font-size:1em;}
+.foo{color:blue;}
 .bar{font-size:1em;}
 
 @media (min-width:50em){
