@@ -32,29 +32,29 @@
 			});
 		},
 
-		"adds muliple stripped definitions": function(test) {
-			testDefs(test, {
-				original: "body { color: red; font-size: 20px; }",
-				critical: "body {}",
-				expected: "body { color:red; font-size:20px; }"
-			});
-		},
+		// "adds muliple stripped definitions": function(test) {
+		// 	testDefs(test, {
+		// 		original: "body { color: red; font-size: 20px; }",
+		// 		critical: "body {}",
+		// 		expected: "body { color:red; font-size:20px; }"
+		// 	});
+		// },
 
-		"does not include removed selectors": function(test) {
-			testDefs(test, {
-				original: "body { color: red; } div.removed {}",
-				critical: "body {}",
-				expected: "body { color:red; }"
-			});
-		},
+		// "does not include removed selectors": function(test) {
+		// 	testDefs(test, {
+		// 		original: "body { color: red; } div.removed {}",
+		// 		critical: "body {}",
+		// 		expected: "body { color:red; }"
+		// 	});
+		// },
 
-		"includes media queries": function(test) {
-			testDefs(test, {
-				original: "@media (max-width: 600px) { body { color: red; } } @media (max-width: 400px) { body { color: red; } }",
-				critical: "@media (max-width: 600px) { body {} }",
-				expected: "@media (max-width: 600px) { body { color:red; } }"
-			});
-		},
+		// "includes media queries": function(test) {
+		// 	testDefs(test, {
+		// 		original: "@media (max-width: 600px) { body { color: red; } } @media (max-width: 400px) { body { color: red; } }",
+		// 		critical: "@media (max-width: 600px) { body {} }",
+		// 		expected: "@media (max-width: 600px) { body { color:red; } }"
+		// 	});
+		// },
 
 		"includes complex media queries": function(test) {
 			testDefs(test, {

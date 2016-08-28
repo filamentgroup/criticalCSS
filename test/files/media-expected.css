@@ -1,5 +1,8 @@
 @media (min-width:50em){
-  .bio{font-size:1em;}
+  .bio{
+    font-size:1em;
+    color: red;
+  }
   .bio img {
     float:left;
     -moz-box-sizing:content-box;

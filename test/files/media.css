@@ -14,3 +14,7 @@
 }
 
 .baz{font-size:1em;}
+
+@media (min-width:50em){
+  .bio{color: red;}
+}

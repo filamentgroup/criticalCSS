@@ -186,13 +186,27 @@
 					return criticalRule;
 				}
 
-				// find the original definition in the original AST and replace the
-				// criticalCSS definition with it
-				var originalRule = _.find(originalAST.stylesheet.rules, function(rule){
-					return _.isEqual(rule.selectors, criticalRule.selectors);
-				});
+				// find the any original definition in the original AST that matches the
+				// selector and replace the criticalCSS definition with it
+        var originalDecls = _.flatten(
+          originalAST
+            .stylesheet
+            .rules
+            .filter(function(rule){
+							return _.isEqual(rule.selectors, criticalRule.selectors);
+						})
+            .map(function(rule){
+              return rule.declarations;
+            })
+        );
 
-				return originalRule || criticalRule;
+        criticalRule.declarations =
+          _.uniqBy(
+            criticalRule.declarations.concat(originalDecls),
+            function(decl){ return decl.property + ":" + decl.value; }
+          );
+
+				return criticalRule;
 			})
 			.map(function(criticalMedia){
 				// handle media only here
@@ -220,11 +234,23 @@
 					.map(function(criticalRule){
 						// find the original definition in the original AST and replace the
 						// criticalCSS definition with it
-						var originalRule = _.find(originalMediaRules, function(rule){
-							return _.isEqual(rule.selectors, criticalRule.selectors);
-						});
+						var originalDecls = _.flatten(
+              originalMediaRules
+                .filter(function(rule){
+							    return _.isEqual(rule.selectors, criticalRule.selectors);
+						    })
+                .map(function(rule){
+                  return rule.declarations;
+                })
+            );
 
-						return originalRule || criticalRule;
+            criticalRule.declarations =
+              _.uniqBy(
+                criticalRule.declarations.concat(originalDecls),
+                function(decl){ return decl.property + ":" + decl.value; }
+              );
+
+						return criticalRule;
 					});
 
 				return criticalMedia;
