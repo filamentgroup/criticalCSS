@@ -43,7 +43,7 @@
 
 		"includes media queries": function(test) {
 			testDefs(test, {
-				original: "@media (max-width: 600px) { body { color: red; } div.removed {} }",
+				original: "@media (max-width: 600px) { body { color: red; } } @media (max-width: 400px) { body { color: red; } }",
 				critical: "@media (max-width: 600px) { body {} }",
 				expected: "@media (max-width: 600px) { body { color:red; } }"
 			});

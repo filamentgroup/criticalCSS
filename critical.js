@@ -173,18 +173,62 @@
 		var originalAST = css.parse(originalCSS);
 		var criticalAST = css.parse(criticalCSS);
 
-		// for all rules that are in the criticalCSS AST replace them with the
-		// original rule definitions from the original AST
-		var newRules = criticalAST.stylesheet.rules.map(function(criticalRule){
+		// for all the top level rules that are in the criticalCSS AST replace them
+		// with the original rule definitions from the original AST
+		var newRules;
 
-			// find the original definition in the original AST and replace the
-			// criticalCSS definition with it
-			var originalRule = _.find(originalAST.stylesheet.rules, function(rule){
-				return _.isEqual(rule.selectors, criticalRule.selectors);
+		newRules = criticalAST
+			.stylesheet
+			.rules
+			.map(function(criticalRule){
+				// handle media and other rules elsewhere
+				if( criticalRule.type !== "rule" ){
+					return criticalRule;
+				}
+
+				// find the original definition in the original AST and replace the
+				// criticalCSS definition with it
+				var originalRule = _.find(originalAST.stylesheet.rules, function(rule){
+					return _.isEqual(rule.selectors, criticalRule.selectors);
+				});
+
+				return originalRule || criticalRule;
+			})
+			.map(function(criticalMedia){
+				// handle media only here
+				if( criticalMedia.type !== "media" ){
+					return criticalMedia;
+				}
+
+				// find all the rules that apply for the current media query
+				var originalMediaRules;
+
+				originalMediaRules = _.flatten(
+					originalAST
+						.stylesheet
+						.rules
+						.filter(function(rule){
+							return rule.media == criticalMedia.media;
+						})
+						.map(function(media){
+							return media.rules;
+						})
+				);
+
+				criticalMedia.rules = criticalMedia
+					.rules
+					.map(function(criticalRule){
+						// find the original definition in the original AST and replace the
+						// criticalCSS definition with it
+						var originalRule = _.find(originalMediaRules, function(rule){
+							return _.isEqual(rule.selectors, criticalRule.selectors);
+						});
+
+						return originalRule || criticalRule;
+					});
+
+				return criticalMedia;
 			});
-
-			return originalRule || criticalRule;
-		});
 
 		criticalAST.stylesheet.rules = newRules;
 
