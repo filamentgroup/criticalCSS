@@ -167,49 +167,53 @@
 
 	};
 
+
+	function replaceDecls(originalRules, check){
+		return function(criticalRule){
+			if(check && !check(criticalRule.type)){
+				return criticalRule;
+			}
+
+			var originalDecls = _.flatten(
+				originalRules
+					.filter(function(rule){
+						return _.isEqual(rule.selectors, criticalRule.selectors);
+					})
+					.map(function(rule){
+						return rule.declarations;
+					})
+			);
+
+			criticalRule.declarations =
+				_.uniqBy(
+					criticalRule.declarations.concat(originalDecls),
+					function(decl){ return decl.property + ":" + decl.value; }
+				);
+
+			return criticalRule;
+		};
+	}
+
 	exports.restoreOriginalDefs = function(originalCSS, criticalCSS, stringifyOpts){
 		// parse both the original CSS and the critical CSS so we can deal with the
 		// ASTs directly
 		var originalAST = css.parse(originalCSS);
 		var criticalAST = css.parse(criticalCSS);
 
-		// for all the top level rules that are in the criticalCSS AST replace them
-		// with the original rule definitions from the original AST
 		var newRules;
-
 		newRules = criticalAST
 			.stylesheet
 			.rules
-			.map(function(criticalRule){
-				// handle media and other rules elsewhere
-				if( criticalRule.type !== "rule" ){
-					return criticalRule;
-				}
-
-				// find the any original definition in the original AST that matches the
-				// selector and replace the criticalCSS definition with it
-        var originalDecls = _.flatten(
-          originalAST
-            .stylesheet
-            .rules
-            .filter(function(rule){
-							return _.isEqual(rule.selectors, criticalRule.selectors);
-						})
-            .map(function(rule){
-              return rule.declarations;
-            })
-        );
-
-        criticalRule.declarations =
-          _.uniqBy(
-            criticalRule.declarations.concat(originalDecls),
-            function(decl){ return decl.property + ":" + decl.value; }
-          );
-
-				return criticalRule;
-			})
+			// for all the top level rules that are in the criticalCSS AST replace them
+			// with the original rule definitions from the original AST
+			.map(replaceDecls(originalAST.stylesheet.rules, function(ruleType){
+				// only deal with top level rules here
+				return ruleType === "rule";
+			}))
+			// for all the rules that are in media queries match the same media
+			// queries in the original and use the rules from there
 			.map(function(criticalMedia){
-				// handle media only here
+				// handle media rules only here
 				if( criticalMedia.type !== "media" ){
 					return criticalMedia;
 				}
@@ -217,6 +221,8 @@
 				// find all the rules that apply for the current media query
 				var originalMediaRules;
 
+				// get all of the rules inside media queries that match the critical
+				// media query media string
 				originalMediaRules = _.flatten(
 					originalAST
 						.stylesheet
@@ -229,29 +235,11 @@
 						})
 				);
 
+				// replace the declarations in each of the rules for this media query
+				// with the declarations in the original css for the same media query
 				criticalMedia.rules = criticalMedia
 					.rules
-					.map(function(criticalRule){
-						// find the original definition in the original AST and replace the
-						// criticalCSS definition with it
-						var originalDecls = _.flatten(
-              originalMediaRules
-                .filter(function(rule){
-							    return _.isEqual(rule.selectors, criticalRule.selectors);
-						    })
-                .map(function(rule){
-                  return rule.declarations;
-                })
-            );
-
-            criticalRule.declarations =
-              _.uniqBy(
-                criticalRule.declarations.concat(originalDecls),
-                function(decl){ return decl.property + ":" + decl.value; }
-              );
-
-						return criticalRule;
-					});
+					.map(replaceDecls(originalMediaRules));
 
 				return criticalMedia;
 			});
