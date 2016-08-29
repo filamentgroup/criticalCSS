@@ -5,4 +5,4 @@
 
 .baz {}
 
-.foo {}
+.foo { width: initial; }
