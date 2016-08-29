@@ -209,6 +209,14 @@
 		var criticalAST = css.parse(criticalCSS);
 
 		var newRules;
+
+		// run two maps over the rules in the critical CSS
+		//
+		// 1. map the top level rules to rules where the declarations are replaced
+		//    by the declarations from the same selectors in the original CSS
+		// 2. map the media query rules to rules where the declarations are replaced
+		//    by the declarations from the same selectors in the same media queries
+		//    in the original CSS
 		newRules = criticalAST
 			.stylesheet
 			.rules
