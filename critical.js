@@ -167,13 +167,21 @@
 
 	};
 
-
+	// create a function that can be passed to `map` for a collection of critical
+	// css rules. The function will match original rules against the selector of
+	// the critical css declarations, concatenate them together, and then keep
+	// only the unique ones
 	function replaceDecls(originalRules, check){
 		return function(criticalRule){
+			// restrict the declaration mapping to a certain type of rule, e.g. 'rule'
+			// or 'media'
 			if(check && !check(criticalRule.type)){
 				return criticalRule;
 			}
 
+			// find all the rules in the original CSS that have the same selectors and
+			// then create an array of all the associated declarations. Note that this
+			// works with mutiple duplicate selectors on the original CSS
 			var originalDecls = _.flatten(
 				originalRules
 					.filter(function(rule){
@@ -184,6 +192,8 @@
 					})
 			);
 
+			// take all the declarations that were found from the original CSS and use
+			// them here, make sure that we de-dup any declarations from the original CSS
 			criticalRule.declarations =
 				_.uniqBy(
 					criticalRule.declarations.concat(originalDecls),
