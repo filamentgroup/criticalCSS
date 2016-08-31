@@ -7,5 +7,5 @@
 }
 
 @document url(http://example.com) {
-  .bio{border-size: 1px;}
+  .bio{background-color: blue;border-size: 1px;}
 }
