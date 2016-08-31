@@ -194,9 +194,11 @@
 
 			// take all the declarations that were found from the original CSS and use
 			// them here, make sure that we de-dup any declarations from the original CSS
-			criticalRule.declarations = _.uniqBy(originalDecls, function(decl){
-				return decl.property + ":" + decl.value;
-			});
+			criticalRule.declarations =
+				_.uniqBy(
+					criticalRule.declarations.concat(originalDecls),
+					function(decl){ return decl.property + ":" + decl.value; }
+				);
 
 			return criticalRule;
 		};
