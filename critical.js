@@ -202,6 +202,8 @@
 		};
 	}
 
+	var nested = ["media", "supports", "document"];
+
 	exports.restoreOriginalDefs = function(originalCSS, criticalCSS, stringifyOpts){
 		// parse both the original CSS and the critical CSS so we can deal with the
 		// ASTs directly
@@ -228,11 +230,13 @@
 			}))
 			// for all the rules that are in media queries match the same media
 			// queries in the original and use the rules from there
-			.map(function(criticalMedia){
+			.map(function(criticalNested){
 				// handle media rules only here
-				if( criticalMedia.type !== "media" ){
-					return criticalMedia;
+				if( nested.indexOf(criticalNested.type) == -1){
+					return criticalNested;
 				}
+
+				var type = criticalNested.type;
 
 				// find all the rules that apply for the current media query
 				var originalMediaRules;
@@ -244,7 +248,7 @@
 						.stylesheet
 						.rules
 						.filter(function(rule){
-							return rule.media == criticalMedia.media;
+							return rule[type] == criticalNested[type];
 						})
 						.map(function(media){
 							return media.rules;
@@ -253,11 +257,11 @@
 
 				// replace the declarations in each of the rules for this media query
 				// with the declarations in the original css for the same media query
-				criticalMedia.rules = criticalMedia
+				criticalNested.rules = criticalNested
 					.rules
 					.map(replaceDecls(originalMediaRules));
 
-				return criticalMedia;
+				return criticalNested;
 			});
 
 		criticalAST.stylesheet.rules = newRules;

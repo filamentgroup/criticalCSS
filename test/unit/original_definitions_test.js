@@ -62,6 +62,14 @@
 				critical: readTestCSSFile("media-critical"),
 				expected: readTestCSSFile("media-expected")
 			});
+		},
+
+		"includes nested rules": function(test) {
+			testDefs(test, {
+				original: readTestCSSFile("nested"),
+				critical: readTestCSSFile("nested-critical"),
+				expected: readTestCSSFile("nested-expected")
+			});
 		}
 	};
 }(typeof exports === "object" && exports || this));
