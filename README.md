@@ -154,7 +154,7 @@ Check out the tests!
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-* V2.0.0 - Append the declarations from the original input CSS to selectors chosen by criticalCSS (includes vendor prefixes and other bits that the CSS object model misses). 
+* v2.0.0 - Append the declarations from the original input CSS to selectors chosen by criticalCSS (includes vendor prefixes and other bits that the CSS object model misses). 
 * v1.0.0 - Upgrade the underlying tool to Phantom 2.1
 * v0.6.0 - Add a CLI version
 * v0.5.0 - Add `ignoreConsole` option
