@@ -1,0 +1,14 @@
+@media (min-width:50em){
+  .bio{
+    font-size:1em;
+    color: red;
+  }
+  .bio img {
+    float:left;
+    -moz-box-sizing:content-box;
+  }
+}
+
+.baz{font-size:1em;}
+
+.foo{font-size:1em;color:blue;}

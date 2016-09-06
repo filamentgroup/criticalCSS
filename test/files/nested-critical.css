@@ -1,0 +1,11 @@
+@media (min-width:50em){
+  .bio{}
+}
+
+@supports (box-shadow:50em){
+  .bio{}
+}
+
+@document url(http://example.com) {
+  .bio{background-color: blue;}
+}

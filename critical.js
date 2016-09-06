@@ -10,6 +10,8 @@
 	var fs = require( "fs" );
 	var os = require( "os" );
 	var postcss = require( "postcss" );
+	var css = require('css');
+	var _ = require("lodash");
 
 	var DEFAULT_BUFFER_SIZE = 800*1024; //had this as the set val before, don't want to break things
 
@@ -163,6 +165,110 @@
 			}
 		);
 
+	};
+
+	// create a function that can be passed to `map` for a collection of critical
+	// css rules. The function will match original rules against the selector of
+	// the critical css declarations, concatenate them together, and then keep
+	// only the unique ones
+	function replaceDecls(originalRules, check){
+		return function(criticalRule){
+			// restrict the declaration mapping to a certain type of rule, e.g. 'rule'
+			// or 'media'
+			if(check && !check(criticalRule.type)){
+				return criticalRule;
+			}
+
+			// find all the rules in the original CSS that have the same selectors and
+			// then create an array of all the associated declarations. Note that this
+			// works with mutiple duplicate selectors on the original CSS
+			var originalDecls = _.flatten(
+				originalRules
+					.filter(function(rule){
+						return _.isEqual(rule.selectors, criticalRule.selectors);
+					})
+					.map(function(rule){
+						return rule.declarations;
+					})
+			);
+
+			// take all the declarations that were found from the original CSS and use
+			// them here, make sure that we de-dup any declarations from the original CSS
+			criticalRule.declarations =
+				_.uniqBy(criticalRule.declarations.concat(originalDecls),	function(decl){
+					return decl.property + ":" + decl.value;
+				});
+
+			return criticalRule;
+		};
+	}
+
+	var nested = ["media", "supports", "document"];
+
+	exports.restoreOriginalDefs = function(originalCSS, criticalCSS, stringifyOpts){
+		// parse both the original CSS and the critical CSS so we can deal with the
+		// ASTs directly
+		var originalAST = css.parse(originalCSS);
+		var criticalAST = css.parse(criticalCSS);
+
+		var newRules;
+
+		// run two maps over the rules in the critical CSS
+		//
+		// 1. map the top level rules to rules where the declarations are replaced
+		//    by the declarations from the same selectors in the original CSS
+		// 2. map the media query rules to rules where the declarations are replaced
+		//    by the declarations from the same selectors in the same media queries
+		//    in the original CSS
+		newRules = criticalAST
+			.stylesheet
+			.rules
+			// for all the top level rules that are in the criticalCSS AST replace them
+			// with the original rule definitions from the original AST
+			.map(replaceDecls(originalAST.stylesheet.rules, function(ruleType){
+				// only deal with top level rules here
+				return ruleType === "rule";
+			}))
+			// for all the rules that are in media queries match the same media
+			// queries in the original and use the rules from there
+			.map(function(criticalNested){
+				// handle media rules only here
+				if( nested.indexOf(criticalNested.type) == -1){
+					return criticalNested;
+				}
+
+				var type = criticalNested.type;
+
+				// find all the rules that apply for the current media query
+				var originalMediaRules;
+
+				// get all of the rules inside media queries that match the critical
+				// media query media string
+				originalMediaRules = _.flatten(
+					originalAST
+						.stylesheet
+						.rules
+						.filter(function(rule){
+							return rule[type] == criticalNested[type];
+						})
+						.map(function(media){
+							return media.rules;
+						})
+				);
+
+				// replace the declarations in each of the rules for this media query
+				// with the declarations in the original css for the same media query
+				criticalNested.rules = criticalNested
+					.rules
+					.map(replaceDecls(originalMediaRules));
+
+				return criticalNested;
+			});
+
+		criticalAST.stylesheet.rules = newRules;
+
+		// return the CSS as a string
+		return css.stringify(criticalAST, stringifyOpts);
 	};
 
 }(typeof exports === "object" && exports || this));
