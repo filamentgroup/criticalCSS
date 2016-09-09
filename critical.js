@@ -271,4 +271,22 @@
 		return css.stringify(criticalAST, stringifyOpts);
 	};
 
+	exports.restoreFontFaces = function(originalCSS, criticalCSS, stringifyOpts){
+		// parse both the original CSS and the critical CSS so we can deal with the
+		// ASTs directly
+		var originalAST = css.parse(originalCSS);
+		var criticalAST = css.parse(criticalCSS);
+
+		var fontFaceRules = originalAST
+			.stylesheet
+			.rules
+			.filter(function(rule){
+				return rule.type === "font-face";
+			});
+
+		criticalAST.stylesheet.rules = fontFaceRules.concat(criticalAST.stylesheet.rules);
+
+		return css.stringify(criticalAST, stringifyOpts);
+	};
+
 }(typeof exports === "object" && exports || this));
