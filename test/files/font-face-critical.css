@@ -1,1 +1,2 @@
-.bio { color: red; font-family: foo; }
+.bio { font-family: foo; }
+.test { font-family: "bar baz bing"; }

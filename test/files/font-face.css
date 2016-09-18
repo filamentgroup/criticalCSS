@@ -3,5 +3,15 @@
   src: url("http://example.com/foo.ttf");
 }
 
+@font-face {
+  font-family: "bar baz bing";
+  src: url("http://example.com/bar-baz-bing.ttf");
+}
+
+@font-face {
+  font-family: "bak";
+  src: url("http://example.com/bak.ttf");
+}
+
 .bio { color: red; font-family: foo; }
 
