@@ -271,20 +271,72 @@
 		return css.stringify(criticalAST, stringifyOpts);
 	};
 
+	function collectFontFamilies(rule){
+		return rule.declarations.reduce(function(acc, decl){
+			if(decl.property === "font-family"){
+				acc.push(decl.value);
+			}
+
+			return acc;
+		}, []);
+	}
+
 	exports.restoreFontFaces = function(originalCSS, criticalCSS, stringifyOpts){
 		// parse both the original CSS and the critical CSS so we can deal with the
 		// ASTs directly
 		var originalAST = css.parse(originalCSS);
 		var criticalAST = css.parse(criticalCSS);
 
-		var fontFaceRules = originalAST
+		var fontFaceRules, requiredFontFamilies, requiredFontFaces;
+
+		fontFaceRules = originalAST
 			.stylesheet
 			.rules
 			.filter(function(rule){
 				return rule.type === "font-face";
 			});
 
-		criticalAST.stylesheet.rules = fontFaceRules.concat(criticalAST.stylesheet.rules);
+		requiredFontFamilies = criticalAST
+			.stylesheet
+			.rules
+			.reduce(function(acc, rule){
+				var type = rule.type;
+
+				if(type === "rule") {
+					return acc.concat(collectFontFamilies(rule));
+				} else if (nested.indexOf(type) > -1){
+					return acc.concat(_.flatten(rule[type].rules.map(function(nestedRule){
+						return collectFontFamilies(nestedRule);
+					})));
+				} else {
+					return acc;
+				}
+			}, []);
+
+		requiredFontFaces = requiredFontFamilies.reduce(function(acc, requiredFamily){
+			return acc.concat(fontFaceRules.filter(function(fontFace){
+				var familyNameDecls, familyName;
+
+				familyNameDecls = fontFace
+					.declarations
+					.filter(function(decl){
+						return decl.property == "font-family";
+					});
+
+				// choose the value of the last of many possibly family name declarations
+				familyName = familyNameDecls[familyNameDecls.length - 1]
+					.value
+					.replace(/'|"/g, "");
+
+				// if the required family matches the family name of the rule
+				// then we want to keep this font face
+				return requiredFamily.indexOf(familyName) > -1;
+			}));
+		}, []);
+
+		// prepend the font faces to the critical css output
+		criticalAST.stylesheet.rules =
+			requiredFontFaces.concat(criticalAST.stylesheet.rules);
 
 		return css.stringify(criticalAST, stringifyOpts);
 	};

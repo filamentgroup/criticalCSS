@@ -3,5 +3,5 @@
   src: url("http://example.com/foo.ttf");
 }
 
-.bio { color: red; }
+.bio { color: red; font-family: foo; }
 
