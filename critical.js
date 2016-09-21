@@ -334,6 +334,10 @@
 			}));
 		}, []);
 
+		// the above reduce will include each font face for every appearence
+		// in a `font-family` declaration, here we remove duplicates
+		requiredFontFaces = _.uniq(requiredFontFaces);
+
 		// prepend the font faces to the critical css output
 		criticalAST.stylesheet.rules =
 			requiredFontFaces.concat(criticalAST.stylesheet.rules);
