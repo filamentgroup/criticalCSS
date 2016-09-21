@@ -15,3 +15,8 @@
 
 .bio { color: red; font-family: foo; }
 
+@media (min-width: 900px) {
+  .test { font-family: "bar baz bing"; }
+  .test2 { font-family: "bar baz bing"; }
+}
+

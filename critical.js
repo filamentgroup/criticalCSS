@@ -305,7 +305,7 @@
 				if(type === "rule") {
 					return acc.concat(collectFontFamilies(rule));
 				} else if (nested.indexOf(type) > -1){
-					return acc.concat(_.flatten(rule[type].rules.map(function(nestedRule){
+					return acc.concat(_.flatten(rule.rules.map(function(nestedRule){
 						return collectFontFamilies(nestedRule);
 					})));
 				} else {
