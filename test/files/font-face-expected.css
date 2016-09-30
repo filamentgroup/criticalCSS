@@ -1,0 +1,15 @@
+@font-face {
+  font-family: "foo";
+  src: url("http://example.com/foo.ttf");
+}
+
+@font-face {
+  font-family: "bar baz bing";
+  src: url("http://example.com/bar-baz-bing.ttf");
+}
+
+.bio { font-family: foo; }
+@media (min-width: 900px) {
+  .test { font-family: "bar baz bing"; }
+  .test2 { font-family: "bar baz bing"; }
+}
