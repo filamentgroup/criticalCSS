@@ -115,6 +115,12 @@ outputs to `console` that are in the JavaScript on a page. If set to
 
 Takes a path to the CSS file and a callback function and returns a `JSON.stringify`'d subset of a `CSSRuleList`
 
+#### options.restoreFontFaces
+Type: `Boolean`
+Default value: `false`
+
+If you include `@font-face` declarations in you `all.css` file and set this flag to `true` in your options criticalcss will include all the `@font-face` declarations that are required to satisfy `font-family` declarations in the criticalcss output.
+
 ### Default values for options hash
 
 * `buffer`: 800*1024;
