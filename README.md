@@ -159,7 +159,7 @@ Options:
                            criticalcss                     [array] [default: []]
   -i, --ignoreConsole      Criticalcss will pick up console errors, set this to
                            ignore them                [boolean] [default: false]
-  -issl, --ignoreConsole   Ignores SSL errors, such as expired or self-signed
+  -issl, --ignoreSSL       Ignores SSL errors, such as expired or self-signed
                            certificate errors         [boolean] [default: false]
 
 ```
