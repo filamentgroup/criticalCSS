@@ -132,6 +132,10 @@
 			execArgs.push( "--ignoreConsole" );
 		}
 
+		if (opts.ignoreSSL) {
+			execArgs.unshift('--ignore-ssl-errors=true');
+		}
+
 		execFile( phantomJsPath,
 						 execArgs,
 			{

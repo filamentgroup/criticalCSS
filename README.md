@@ -69,6 +69,7 @@ Takes url or path to file, an options hash, and a callback function
 * `rules`: []; // REQUIRED
 * `buffer`: 800*1024;
 * `ignoreConsole`: false;
+* `ignoreSSL`: false;
 
 #### options.width
 Type: `Integer`
@@ -111,6 +112,13 @@ Since criticalCSS handles output from STDOUT, it will also catch any
 outputs to `console` that are in the JavaScript on a page. If set to
 `true`, those will be silenced.
 
+#### options.ignoreSSL
+Type: `Boolean`
+Default value: `false`
+
+Ignores SSL errors, such as expired or self-signed certificate errors. If set to
+`true`, those will be ignored.
+
 `.getRules`
 
 Takes a path to the CSS file and a callback function and returns a `JSON.stringify`'d subset of a `CSSRuleList`
@@ -151,6 +159,8 @@ Options:
                            criticalcss                     [array] [default: []]
   -i, --ignoreConsole      Criticalcss will pick up console errors, set this to
                            ignore them                [boolean] [default: false]
+  -issl, --ignoreConsole   Ignores SSL errors, such as expired or self-signed
+                           certificate errors         [boolean] [default: false]
 
 ```
 ## Examples
@@ -160,7 +170,7 @@ Check out the tests!
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-* v2.0.0 - Append the declarations from the original input CSS to selectors chosen by criticalCSS (includes vendor prefixes and other bits that the CSS object model misses). 
+* v2.0.0 - Append the declarations from the original input CSS to selectors chosen by criticalCSS (includes vendor prefixes and other bits that the CSS object model misses).
 * v1.0.0 - Upgrade the underlying tool to Phantom 2.1
 * v0.6.0 - Add a CLI version
 * v0.5.0 - Add `ignoreConsole` option

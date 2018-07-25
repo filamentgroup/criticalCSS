@@ -43,6 +43,11 @@ var argv = require( "yargs" )
            .describe( "ignoreConsole", "Criticalcss will pick up console errors, set this to ignore them" )
            .default( "ignoreConsole", false )
 
+           .alias( "issl", "ignoreSSL" )
+           .boolean( "ignoreSSL" )
+           .describe( "ignoreSSL", "Ignores SSL errors, such as expired or self-signed certificate errors" )
+           .default( "ignoreSSL", false )
+
            .count( "verbose" )
            .alias( "v", "verbose" )
 
