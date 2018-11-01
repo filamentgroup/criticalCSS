@@ -44,6 +44,8 @@
 			opts = {};
 		}
 
+		cb = cb || defaultCb;
+
 		var bufferSize = opts.buffer || DEFAULT_BUFFER_SIZE;
 
 		execFile( phantomJsPath,
@@ -97,6 +99,8 @@
 			opts = {};
 		}
 
+		cb = cb || defaultCb;
+
 		var width = opts.width || 1200;
 		var height = opts.height || 900;
 		var forceInclude = opts.forceInclude || [];
@@ -122,7 +126,7 @@
 		}
 
 		// TODO switch tmpfile to js object
-		require("./lib/extract.js")
+		return require("./lib/extract.js")
 			.extract(url, width, height, forceInclude, tmpfile)
 			.then((critCSS) => {
 				if( usepostcss ){
@@ -130,42 +134,21 @@
 						.process(critCSS)
 						.then(function (result) {
 							cb(null, result.css);
+
+							return result.css;
 						});
 				}
 
-				return cb( null, critCSS);
+				cb( null, critCSS);
+
+				return critCSS;
 			})
-			.catch((err) => cb(err, null))
+			.catch((err) => cb(err, null));
 			// .finally(() => {
 			//		if( fs.existsSync(tmpfile) ){
 			//		 fs.unlinkSync(tmpfile);
 			//	 }
 			// });
-
-		return;
-
-		var execArgs = [
-				path.resolve( path.join( __dirname, "lib", "criticalrunner.js" ) ),
-				url,
-				width,
-				height,
-			JSON.stringify( forceInclude ),
-			tmpfile
-		];
-
-		if( opts.ignoreConsole ){
-			execArgs.push( "--ignoreConsole" );
-		}
-
-		execFile( phantomJsPath,
-						 execArgs,
-			{
-				maxBuffer: bufferSize
-			},
-
-
-		);
-
 	};
 
 	// create a function that can be passed to `map` for a collection of critical
