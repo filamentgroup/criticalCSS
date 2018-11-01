@@ -119,13 +119,18 @@
 			throw e;
 		}
 
+		// TODO switch tmpfile to js object
+		require("./lib/extract.js").extract(url, width, height, forceInclude, tmpfile);
+
+		return;
+
 		var execArgs = [
 				path.resolve( path.join( __dirname, "lib", "criticalrunner.js" ) ),
 				url,
 				width,
 				height,
-				JSON.stringify( forceInclude ),
-				tmpfile
+			JSON.stringify( forceInclude ),
+			tmpfile
 		];
 
 		if( opts.ignoreConsole ){
@@ -216,10 +221,10 @@
 		// run two maps over the rules in the critical CSS
 		//
 		// 1. map the top level rules to rules where the declarations are replaced
-		//    by the declarations from the same selectors in the original CSS
+		//		by the declarations from the same selectors in the original CSS
 		// 2. map the media query rules to rules where the declarations are replaced
-		//    by the declarations from the same selectors in the same media queries
-		//    in the original CSS
+		//		by the declarations from the same selectors in the same media queries
+		//		in the original CSS
 		newRules = criticalAST
 			.stylesheet
 			.rules
