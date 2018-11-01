@@ -1,6 +1,8 @@
 /*global require:true*/
 /*global console:true*/
 /*global __dirname:true*/
+/* eslint esnext: true */
+
 (function( exports ){
 	"use strict";
 
@@ -120,7 +122,25 @@
 		}
 
 		// TODO switch tmpfile to js object
-		require("./lib/extract.js").extract(url, width, height, forceInclude, tmpfile);
+		require("./lib/extract.js")
+			.extract(url, width, height, forceInclude, tmpfile)
+			.then((critCSS) => {
+				if( usepostcss ){
+					return postcss([ require('postcss-initial') ])
+						.process(critCSS)
+						.then(function (result) {
+							cb(null, result.css);
+						});
+				}
+
+				return cb( null, critCSS);
+			})
+			.catch((err) => cb(err, null))
+			// .finally(() => {
+			//		if( fs.existsSync(tmpfile) ){
+			//		 fs.unlinkSync(tmpfile);
+			//	 }
+			// });
 
 		return;
 
@@ -143,31 +163,7 @@
 				maxBuffer: bufferSize
 			},
 
-			function(err, stdout, stderr){
-				if( err ){
-					console.log("\nSomething went wrong with phantomjs...");
-					if( stderr ){
-						err.message = stderr;
-					}
-					cb( err, null );
-				} else {
-					if( usepostcss ){
-						postcss([ require('postcss-initial') ])
-							.process(stdout)
-							.then(function (result) {
-								cb(null, result.css);
-							});
 
-						return;
-					}
-
-					cb( null, stdout );
-				}
-
-				if( fs.existsSync(tmpfile) ){
-					fs.unlinkSync(tmpfile);
-				}
-			}
 		);
 
 	};
