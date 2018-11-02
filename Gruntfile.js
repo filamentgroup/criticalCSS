@@ -56,7 +56,8 @@
 		grunt.loadNpmTasks("grunt-contrib-watch");
 		grunt.loadNpmTasks("grunt-contrib-connect");
 
-		grunt.registerTask("test", ["jshint", "connect", "nodeunit"]);
+		// TODO add jshin back in when it supports async/await
+		grunt.registerTask("test", ["connect", "nodeunit"]);
 
 		// Default task.
 		grunt.registerTask("default", ["test"]);
