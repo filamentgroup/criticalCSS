@@ -11,7 +11,7 @@
 	var fs = require( "fs" );
 	var os = require( "os" );
 	var postcss = require( "postcss" );
-	var css = require('css');
+	var css = require("css");
 	var _ = require("lodash");
 	const extract = require("./lib/extract.js");
 	const rules = require("./lib/rules.js");
