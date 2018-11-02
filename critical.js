@@ -14,16 +14,16 @@
 	var postcss = require( "postcss" );
 	var css = require('css');
 	var _ = require("lodash");
-  const extract = require("./lib/extract.js");
+	const extract = require("./lib/extract.js");
+	const rules = require("./lib/rules.js");
 
-	var DEFAULT_BUFFER_SIZE = 800*1024; //had this as the set val before, don't want to break things
+	// add finally to build in Promise, will no-op when added to node
+	require('promise.prototype.finally').shim();
 
 	exports.getRules = function( cssfile, opts, cb ){
 		var defaultCb = function( err, output ){
 			if( err ){
 				throw new Error( err );
-			} else {
-				console.log( output );
 			}
 		};
 
@@ -47,42 +47,15 @@
 
 		cb = cb || defaultCb;
 
-		var bufferSize = opts.buffer || DEFAULT_BUFFER_SIZE;
-
-		execFile( phantomJsPath,
-			[
-				path.resolve( path.join( __dirname, "lib", "rules.js" ) ),
-				cssfile
-			],
-			{
-				maxBuffer: bufferSize
-			},
-
-			function(err, stdout, stderr){
-				if( err ){
-					console.log("\nSomething went wrong with phantomjs...");
-					if( stderr ){
-						err.message = stderr;
-					}
-					cb( err, null );
-				} else {
-					stdout = stdout.replace("Unsafe JavaScript attempt to access frame with URL about:blank from frame with URL ", "");
-					stdout = stdout.replace(/file:\/\/.*rules.js\./, "");
-					stdout = stdout.replace(" Domains, protocols and ports must match.\n\n", "");
-					stdout = stdout.replace(" Domains, protocols and ports must match.\r\n\r\n", ""); //windows
-					cb( null, stdout );
-				}
-
-			}
-		);
+		return rules(cssfile)
+			.then((rules) => { cb(null, rules); return rules; })
+			.catch((err) => cb(err, null));
 	};
 
 	exports.findCritical = function( url, opts, cb ){
 		var defaultCb = function( err, output ){
 			if( err ){
 				throw new Error( err );
-			} else {
-				console.log( output );
 			}
 		};
 
@@ -115,13 +88,14 @@
 
 		var rulesString = JSON.stringify( rules );
 
-    // TODO use "tmp" file library instead of date time
+		// TODO use "tmp" file library instead of date time
 		tmpfile = path.join( os.tmpdir(), "criticalcss-findcritical-rules" + (new Date()).getTime());
 		try {
 			fs.writeFileSync( tmpfile, rulesString );
 		} catch( e ){
 			throw e;
 		}
+
 
 		// TODO switch tmpfile to js object
 		return extract(url, width, height, forceInclude, tmpfile)
@@ -137,15 +111,14 @@
 				}
 
 				cb( null, critCSS);
-
 				return critCSS;
 			})
-			.catch((err) => cb(err, null));
-			// .finally(() => {
-			//		if( fs.existsSync(tmpfile) ){
-			//		 fs.unlinkSync(tmpfile);
-			//	 }
-			// });
+			.catch((err) => cb(err, null))
+			.finally(() => {
+				if( fs.existsSync(tmpfile) ){
+					fs.unlinkSync(tmpfile);
+				}
+			});
 	};
 
 	// create a function that can be passed to `map` for a collection of critical
