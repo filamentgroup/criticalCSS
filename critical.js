@@ -13,11 +13,11 @@
 	var postcss = require( "postcss" );
 	var css = require("css");
 	var _ = require("lodash");
-	const extract = require("./lib/extract.js");
+	const atf = require("./lib/atf.js");
 	const rules = require("./lib/rules.js");
 
 	// add finally to build in Promise, will no-op when added to node
-	require('promise.prototype.finally').shim();
+	require("promise.prototype.finally").shim();
 
 	exports.getRules = function( cssfile, opts, cb ){
 		var defaultCb = function( err, output ){
@@ -97,7 +97,7 @@
 
 
 		// TODO switch tmpfile to js object
-		return extract(url, width, height, forceInclude, tmpfile)
+		return atf(url, width, height, forceInclude, tmpfile)
 			.then((critCSS) => {
 				if( usepostcss ){
 					return postcss([ require('postcss-initial') ])
