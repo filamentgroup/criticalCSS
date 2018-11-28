@@ -1,26 +1,28 @@
 /*global require:true*/
 /*global console:true*/
 /*global __dirname:true*/
+/* eslint esnext: true */
+
 (function( exports ){
 	"use strict";
 
-	var phantomJsPath = require("phantomjs-prebuilt").path;
 	var execFile = require("child_process").execFile;
 	var path = require( "path" );
 	var fs = require( "fs" );
 	var os = require( "os" );
 	var postcss = require( "postcss" );
-	var css = require('css');
+	var css = require("css");
 	var _ = require("lodash");
+	const atf = require("./lib/atf.js");
+	const rules = require("./lib/rules.js");
 
-	var DEFAULT_BUFFER_SIZE = 800*1024; //had this as the set val before, don't want to break things
+	// add finally to build in Promise, will no-op when added to node
+	require("promise.prototype.finally").shim();
 
 	exports.getRules = function( cssfile, opts, cb ){
 		var defaultCb = function( err, output ){
 			if( err ){
 				throw new Error( err );
-			} else {
-				console.log( output );
 			}
 		};
 
@@ -42,42 +44,17 @@
 			opts = {};
 		}
 
-		var bufferSize = opts.buffer || DEFAULT_BUFFER_SIZE;
+		cb = cb || defaultCb;
 
-		execFile( phantomJsPath,
-			[
-				path.resolve( path.join( __dirname, "lib", "rules.js" ) ),
-				cssfile
-			],
-			{
-				maxBuffer: bufferSize
-			},
-
-			function(err, stdout, stderr){
-				if( err ){
-					console.log("\nSomething went wrong with phantomjs...");
-					if( stderr ){
-						err.message = stderr;
-					}
-					cb( err, null );
-				} else {
-					stdout = stdout.replace("Unsafe JavaScript attempt to access frame with URL about:blank from frame with URL ", "");
-					stdout = stdout.replace(/file:\/\/.*rules.js\./, "");
-					stdout = stdout.replace(" Domains, protocols and ports must match.\n\n", "");
-					stdout = stdout.replace(" Domains, protocols and ports must match.\r\n\r\n", ""); //windows
-					cb( null, stdout );
-				}
-
-			}
-		);
+		return rules(cssfile)
+			.then((rules) => { cb(null, rules); return rules; })
+			.catch((err) => cb(err, null));
 	};
 
 	exports.findCritical = function( url, opts, cb ){
 		var defaultCb = function( err, output ){
 			if( err ){
 				throw new Error( err );
-			} else {
-				console.log( output );
 			}
 		};
 
@@ -95,6 +72,8 @@
 			opts = {};
 		}
 
+		cb = cb || defaultCb;
+
 		var width = opts.width || 1200;
 		var height = opts.height || 900;
 		var forceInclude = opts.forceInclude || [];
@@ -102,69 +81,43 @@
 		var usepostcss = opts.postcss;
 		var tmpfile;
 
-		var bufferSize = opts.buffer || DEFAULT_BUFFER_SIZE;
-
-
 		if( !Array.isArray( forceInclude ) ){
 			throw new Error( "forceInclude must be an array of selectors" );
 		}
 
 		var rulesString = JSON.stringify( rules );
 
-		//var MAX_ARG_STRLEN = 131072; // on unix machines, the longest string an argument can be
-		tmpfile = path.join( os.tmpdir(), "criticalcss-findcritical-rules" + (new Date()).getTime() );
+		// TODO use "tmp" file library instead of date time
+		tmpfile = path.join( os.tmpdir(), "criticalcss-findcritical-rules" + (new Date()).getTime());
 		try {
 			fs.writeFileSync( tmpfile, rulesString );
 		} catch( e ){
 			throw e;
 		}
 
-		var execArgs = [
-				path.resolve( path.join( __dirname, "lib", "criticalrunner.js" ) ),
-				url,
-				width,
-				height,
-				JSON.stringify( forceInclude ),
-				tmpfile
-		];
 
-		if( opts.ignoreConsole ){
-			execArgs.push( "--ignoreConsole" );
-		}
+		// TODO switch tmpfile to js object
+		return atf(url, width, height, forceInclude, tmpfile)
+			.then((critCSS) => {
+				if( usepostcss ){
+					return postcss([ require('postcss-initial') ])
+						.process(critCSS)
+						.then(function (result) {
+							cb(null, result.css);
 
-		execFile( phantomJsPath,
-						 execArgs,
-			{
-				maxBuffer: bufferSize
-			},
-
-			function(err, stdout, stderr){
-				if( err ){
-					console.log("\nSomething went wrong with phantomjs...");
-					if( stderr ){
-						err.message = stderr;
-					}
-					cb( err, null );
-				} else {
-					if( usepostcss ){
-						postcss([ require('postcss-initial') ])
-							.process(stdout)
-							.then(function (result) {
-								cb(null, result.css);
-							});
-
-						return;
-					}
-
-					cb( null, stdout );
+							return result.css;
+						});
 				}
 
+				cb( null, critCSS);
+				return critCSS;
+			})
+			.catch((err) => cb(err, null))
+			.finally(() => {
 				if( fs.existsSync(tmpfile) ){
 					fs.unlinkSync(tmpfile);
 				}
-			}
-		);
-
+			});
 	};
 
 	// create a function that can be passed to `map` for a collection of critical
@@ -216,10 +169,10 @@
 		// run two maps over the rules in the critical CSS
 		//
 		// 1. map the top level rules to rules where the declarations are replaced
-		//    by the declarations from the same selectors in the original CSS
+		//		by the declarations from the same selectors in the original CSS
 		// 2. map the media query rules to rules where the declarations are replaced
-		//    by the declarations from the same selectors in the same media queries
-		//    in the original CSS
+		//		by the declarations from the same selectors in the same media queries
+		//		in the original CSS
 		newRules = criticalAST
 			.stylesheet
 			.rules

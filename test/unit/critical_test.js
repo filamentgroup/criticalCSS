@@ -175,7 +175,7 @@
 
 		"doesn't map initial values without option" : function( test ){
 			critical.findCritical( "http://localhost:9001/test-site-print.html", {
-				rules: allJSRulesInitial,
+				rules: allJSRulesInitial
 			}, function(err, content){
 				if( err ) { throw new Error( err ); }
 				test.ok(/background-repeat: initial initial;/.test(content));
@@ -237,9 +237,8 @@
 										"\"selectorText\":\"div\",\"cssRules\":[]}," +
 										"{\"cssText\":\".collapsible { text-indent: -9999px; }\"," +
 										"\"selectorText\":\".collapsible\",\"cssRules\":[]},{\"media\":" +
-										"{\"0\":\"(min-width: 1100px)\",\"length\":1,\"mediaText\":" +
-										"\"(min-width: 1100px)\"},\"cssText\":\"@media (min-width: 1100px) " +
-										"{ \\n  div { font-size: 3em; }\\n}\",\"cssRules\":[{\"cssText\"" +
+										"{\"0\":\"(min-width: 1100px)\"},\"cssText\":\"@media (min-width: 1100px) " +
+										"{\\n  div { font-size: 3em; }\\n}\",\"cssRules\":[{\"cssText\"" +
 										":\"div { font-size: 3em; }\",\"selectorText\":\"div\",\"cssRules\"" +
 										":[]}]}]", "Content should match" );
 				}
@@ -260,15 +259,14 @@
 										"{\"cssText\":\".collapsible { text-indent: -9999px; }\"," +
 										"\"selectorText\":\".collapsible\",\"cssRules\":[]}," +
 										"{\"cssText\":\".clear-container::before, " +
-										".clear-container::after { content: \' \'; display: table; }\"," +
+										".clear-container::after { content: \\\" \\\"; display: table; }\"," +
 										"\"selectorText\":\".clear-container::before, .clear-container::after\"," +
 										"\"cssRules\":[]},{\"cssText\":\".clear-container::after { clear: both; }\"," +
 										"\"selectorText\":\".clear-container::after\",\"cssRules\":[]}," +
 										"{\"cssText\":\".clear { float: left; }\",\"selectorText\":\".clear\"," +
-										"\"cssRules\":[]},{\"media\":{\"0\":\"(min-width: 1100px)\"," +
-										"\"length\":1,\"mediaText\":\"(min-width: 1100px)\"}," +
+										"\"cssRules\":[]},{\"media\":{\"0\":\"(min-width: 1100px)\"}," +
 										"\"cssText\":\"@media (min-width: 1100px) " +
-										"{ \\n  div { font-size: 3em; }\\n}\"," +
+										"{\\n  div { font-size: 3em; }\\n}\"," +
 										"\"cssRules\":[{\"cssText\":\"div { font-size: 3em; }\"," +
 										"\"selectorText\":\"div\",\"cssRules\":[]}]}]", "Content should match" );
 				}
