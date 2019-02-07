@@ -1,0 +1,6 @@
+@supports (display: flex) {
+  p { border-color: red; }
+  div { color: red; }
+}
+
+p { color: red; }
