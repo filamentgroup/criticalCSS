@@ -3,3 +3,11 @@
 }
 
 p { color: red; }
+
+@supports (display: flex) {
+    @media(min-width: 100px) {
+        @supports (display: flex) {
+            p { background-color: orange ; }
+        }
+    }
+}
