@@ -124,35 +124,60 @@
 	// css rules. The function will match original rules against the selector of
 	// the critical css declarations, concatenate them together, and then keep
 	// only the unique ones
-	function replaceDecls(originalRules, check){
-		return function(criticalRule){
-			// restrict the declaration mapping to a certain type of rule, e.g. 'rule'
-			// or 'media'
-			if(check && !check(criticalRule.type)){
-				return criticalRule;
+	function replaceDecls(originalRules, criticalRule){
+		// find all the rules in the original CSS that have the same selectors and
+		// then create an array of all the associated declarations. Note that this
+		// works with mutiple duplicate selectors on the original CSS
+		var originalDecls = _.flatten(
+			originalRules
+				.filter(function(rule){
+					return _.isEqual(rule.selectors, criticalRule.selectors);
+				})
+				.map(function(rule){
+					return rule.declarations;
+				})
+		);
+
+		// take all the declarations that were found from the original CSS and use
+		// them here, make sure that we de-dup any declarations from the original CSS
+		criticalRule.declarations =
+			_.uniqBy(criticalRule.declarations.concat(originalDecls),	function(decl){
+				return decl.property + ":" + decl.value;
+			});
+
+		return criticalRule;
+	}
+
+	function replace(originalRules){
+		return function (critical){
+			if( nested.indexOf(critical.type) == -1 && critical.type === "rule"){
+				return replaceDecls(originalRules, critical);
 			}
 
-			// find all the rules in the original CSS that have the same selectors and
-			// then create an array of all the associated declarations. Note that this
-			// works with mutiple duplicate selectors on the original CSS
-			var originalDecls = _.flatten(
+			var type = critical.type;
+
+			// find all the rules that apply for the current nested rule
+			var originalNestedRules;
+
+			// get all of the rules inside nested stuff that match the critical
+			// nested selector text
+			originalNestedRules = _.flatten(
 				originalRules
 					.filter(function(rule){
-						return _.isEqual(rule.selectors, criticalRule.selectors);
+						return rule[type] == critical[type];
 					})
-					.map(function(rule){
-						return rule.declarations;
+					.map(function(nested){
+						return nested.rules;
 					})
 			);
 
-			// take all the declarations that were found from the original CSS and use
-			// them here, make sure that we de-dup any declarations from the original CSS
-			criticalRule.declarations =
-				_.uniqBy(criticalRule.declarations.concat(originalDecls),	function(decl){
-					return decl.property + ":" + decl.value;
-				});
+			// replace the declarations in each of the rules for this media query
+			// with the declarations in the original css for the same media query
+			critical.rules = critical
+				.rules
+				.map(replace(originalNestedRules));
 
-			return criticalRule;
+			return critical;
 		};
 	}
 
@@ -166,59 +191,11 @@
 
 		var newRules;
 
-		// run two maps over the rules in the critical CSS
-		//
-		// 1. map the top level rules to rules where the declarations are replaced
-		//		by the declarations from the same selectors in the original CSS
-		// 2. map the media query rules to rules where the declarations are replaced
-		//		by the declarations from the same selectors in the same media queries
-		//		in the original CSS
-		newRules = criticalAST
+		// map our replace over all the rules in the critical AST
+		criticalAST.stylesheet.rules = criticalAST
 			.stylesheet
 			.rules
-			// for all the top level rules that are in the criticalCSS AST replace them
-			// with the original rule definitions from the original AST
-			.map(replaceDecls(originalAST.stylesheet.rules, function(ruleType){
-				// only deal with top level rules here
-				return ruleType === "rule";
-			}))
-			// for all the rules that are in media queries match the same media
-			// queries in the original and use the rules from there
-			.map(function(criticalNested){
-				// handle media rules only here
-				if( nested.indexOf(criticalNested.type) == -1){
-					return criticalNested;
-				}
-
-				var type = criticalNested.type;
-
-				// find all the rules that apply for the current media query
-				var originalMediaRules;
-
-				// get all of the rules inside media queries that match the critical
-				// media query media string
-				originalMediaRules = _.flatten(
-					originalAST
-						.stylesheet
-						.rules
-						.filter(function(rule){
-							return rule[type] == criticalNested[type];
-						})
-						.map(function(media){
-							return media.rules;
-						})
-				);
-
-				// replace the declarations in each of the rules for this media query
-				// with the declarations in the original css for the same media query
-				criticalNested.rules = criticalNested
-					.rules
-					.map(replaceDecls(originalMediaRules));
-
-				return criticalNested;
-			});
-
-		criticalAST.stylesheet.rules = newRules;
+			.map(replace(originalAST.stylesheet.rules));
 
 		// return the CSS as a string
 		return css.stringify(criticalAST, stringifyOpts);

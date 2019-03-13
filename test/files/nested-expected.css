@@ -4,6 +4,12 @@
 
 @supports (box-shadow:50em){
   .bio{width: 100%;}
+
+  @media (min-width:50em){
+    @supports (box-shadow:50em){
+      .bio{color: red;}
+    }
+  }
 }
 
 @document url(http://example.com) {

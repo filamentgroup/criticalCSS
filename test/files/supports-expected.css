@@ -1,0 +1,14 @@
+@supports (display: flex) {
+  p { border-color: red; }
+}
+
+p { color: red; }
+
+@supports (display: flex) {
+    @media(min-width: 100px) {
+        p { background-color: red ; }
+        @supports (display: flex) {
+            p { background-color: orange ; }
+        }
+    }
+}

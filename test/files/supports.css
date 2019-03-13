@@ -1,0 +1,17 @@
+@supports (display: flex) {
+    p { border-color: red; }
+    div { color: red; }
+}
+
+p { color: red; }
+
+@supports (display: flex) {
+  @media(min-width: 100px) {
+    p { background-color: red ; }
+    div { background-color: red; }
+    @supports (display: flex) {
+      div { border-color: blue; }
+      p { background-color: orange ; }
+    }
+  }
+}

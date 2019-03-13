@@ -230,16 +230,16 @@
 					throw new Error( err );
 				} else {
 					test.equal( content, "[{\"cssText\":\"h1 { font-size: 2em; }\"," +
-										"\"selectorText\":\"h1\",\"cssRules\":[]}," +
+										"\"selectorText\":\"h1\",\"supports\":false,\"cssRules\":[]}," +
 										"{\"cssText\":\"p { font-size: 1.5em; font-weight: bold; }\"," +
-										"\"selectorText\":\"p\",\"cssRules\":[]}," +
+										"\"selectorText\":\"p\",\"supports\":false,\"cssRules\":[]}," +
 										"{\"cssText\":\"div { font-size: 2.5em; font-weight: normal; margin-top: 900px; }\"," +
-										"\"selectorText\":\"div\",\"cssRules\":[]}," +
+										"\"selectorText\":\"div\",\"supports\":false,\"cssRules\":[]}," +
 										"{\"cssText\":\".collapsible { text-indent: -9999px; }\"," +
-										"\"selectorText\":\".collapsible\",\"cssRules\":[]},{\"media\":" +
+										"\"selectorText\":\".collapsible\",\"supports\":false,\"cssRules\":[]},{\"media\":" +
 										"{\"0\":\"(min-width: 1100px)\"},\"cssText\":\"@media (min-width: 1100px) " +
-										"{\\n  div { font-size: 3em; }\\n}\",\"cssRules\":[{\"cssText\"" +
-										":\"div { font-size: 3em; }\",\"selectorText\":\"div\",\"cssRules\"" +
+										"{\\n  div { font-size: 3em; }\\n}\",\"supports\":false,\"cssRules\":[{\"cssText\"" +
+										":\"div { font-size: 3em; }\",\"selectorText\":\"div\",\"supports\":false,\"cssRules\"" +
 										":[]}]}]", "Content should match" );
 				}
 				test.done();
@@ -253,22 +253,22 @@
 					throw new Error( err );
 				} else {
 					test.equal( content, "[{\"cssText\":\"h1 { font-size: 2em; }\"," +
-										"\"selectorText\":\"h1\",\"cssRules\":[]},{\"cssText\":" +
+										"\"selectorText\":\"h1\",\"supports\":false,\"cssRules\":[]},{\"cssText\":" +
 										"\"p { font-size: 1.5em; font-weight: bold; }\"," +
-										"\"selectorText\":\"p\",\"cssRules\":[]}," +
+										"\"selectorText\":\"p\",\"supports\":false,\"cssRules\":[]}," +
 										"{\"cssText\":\".collapsible { text-indent: -9999px; }\"," +
-										"\"selectorText\":\".collapsible\",\"cssRules\":[]}," +
+										"\"selectorText\":\".collapsible\",\"supports\":false,\"cssRules\":[]}," +
 										"{\"cssText\":\".clear-container::before, " +
 										".clear-container::after { content: \\\" \\\"; display: table; }\"," +
 										"\"selectorText\":\".clear-container::before, .clear-container::after\"," +
-										"\"cssRules\":[]},{\"cssText\":\".clear-container::after { clear: both; }\"," +
-										"\"selectorText\":\".clear-container::after\",\"cssRules\":[]}," +
+										"\"supports\":false,\"cssRules\":[]},{\"cssText\":\".clear-container::after { clear: both; }\"," +
+										"\"selectorText\":\".clear-container::after\",\"supports\":false,\"cssRules\":[]}," +
 										"{\"cssText\":\".clear { float: left; }\",\"selectorText\":\".clear\"," +
-										"\"cssRules\":[]},{\"media\":{\"0\":\"(min-width: 1100px)\"}," +
+										"\"supports\":false,\"cssRules\":[]},{\"media\":{\"0\":\"(min-width: 1100px)\"}," +
 										"\"cssText\":\"@media (min-width: 1100px) " +
 										"{\\n  div { font-size: 3em; }\\n}\"," +
-										"\"cssRules\":[{\"cssText\":\"div { font-size: 3em; }\"," +
-										"\"selectorText\":\"div\",\"cssRules\":[]}]}]", "Content should match" );
+										"\"supports\":false,\"cssRules\":[{\"cssText\":\"div { font-size: 3em; }\"," +
+										"\"selectorText\":\"div\",\"supports\":false,\"cssRules\":[]}]}]", "Content should match" );
 				}
 				test.done();
 			});
@@ -280,7 +280,14 @@
 				if( err ){
 					throw new Error( err );
 				} else {
-					test.equal( content, "[{\"cssText\":\"div { border: 1px solid black; }\",\"selectorText\":\"div\",\"cssRules\":[]}]", "Content should match" );
+					test.deepEqual(
+						JSON.parse(content),
+						[{cssText: "div { border: 1px solid black; }",
+							selectorText: "div",
+							supports: false,
+							cssRules: []
+						}],
+						"Content should match" )
 				}
 				test.done();
 			});
